@@ -39,7 +39,7 @@ user:file_search_path(apps, app(apps)).
 
 
 :- http_handler(root(admin), http_redirect(moved_temporary, root(admin/server)), []).
-:- http_handler(/, http_redirect(moved_temporary, root(admin/server)), []).
+:- http_handler(/, http_redirect(moved_temporary, root('docs/index.html')), []).
 
 
 
