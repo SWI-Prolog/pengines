@@ -1,5 +1,5 @@
 :- module(prolog_server,
-      [ server/1            % ?Port        
+      [ server/1            % ?Port
       ]).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -38,8 +38,8 @@ user:file_search_path(apps, app(apps)).
 :- http_handler(root(admin/account), http_reply_file('www/admin/account.html', []), [prefix, authentication(basic(passwd, admin))]).
 
 
-:- http_handler(root(admin), http_redirect(moved, root(admin/apps)), []).
-:- http_handler(/, http_redirect(moved, root(admin/apps)), []).
+:- http_handler(root(admin), http_redirect(moved_temporary, root(admin/server)), []).
+:- http_handler(/, http_redirect(moved_temporary, root(admin/server)), []).
 
 
 
