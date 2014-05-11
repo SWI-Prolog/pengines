@@ -1,0 +1,56 @@
+<html lang="en">   
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/assets/js/pengines.js"></script>
+        
+        <script type="text/x-prolog">
+        
+            start :-
+                pengine_create([
+                    src_text("
+                    
+                        app([], Ys, Ys).
+                        app([X|Xs], Ys, [X|Zs]) :-
+                            app(Xs, Ys, Zs).
+                ")]),
+                pengine_event_loop(handler, []).
+            
+            
+            handler(create(ID, _)) :-
+                pengine_ask(ID, app(Xs, Ys, [1, 2, 3]), []).            
+            handler(success(ID, Sol, _)) :-
+                pengine_output(Sol), 
+                pengine_next(ID, []).
+            handler(failure(ID)) :-
+                pengine_output('failed').
+            handler(error(ID, Err)) :-
+                pengine_output(Err).
+                
+        </script>
+        
+        <script type="text/javascript">
+            function handleCreate() {
+		        pengine.ask('start');
+		    }
+            function handleOutput() {
+    	        $('#out').append(JSON.stringify(this.data) + "<br />");
+		    }
+            function handleError() {
+		        $('#out').append(this.data +"<br />");
+		    }
+            var pengine = new Pengine({
+                oncreate: handleCreate,
+                onoutput: handleOutput,
+                onerror: handleError         
+            });
+        </script>
+        
+    </head>
+    <body>
+        <center style="margin-top:200px;">
+            <div id="out"></div>
+            <div id="err"></div>
+        </center>
+    </body>
+</html>

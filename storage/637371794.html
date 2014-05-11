@@ -1,0 +1,63 @@
+<html lang="en">   
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/assets/js/pengines.js"></script>
+        
+        <script type="text/x-prolog">
+        
+            start :-
+                pengine_create(
+                    [   name(foo),
+                        src_text("foo(a). foo(b). foo(c). foo(d).")
+	            ]),
+                pengine_create(
+                    [   name(bar),
+                        src_text("bar(1). bar(2). bar(3). bar(4).")
+                ]),
+                pengine_event_loop(handler, []), sleep(1).
+            
+
+            handler(create(ID, _)) :-
+                (   pengine_name(ID, foo)
+                ->  pengine_ask(ID, foo(X), [template(X)])
+                ;   pengine_name(ID, bar)
+                ->  pengine_ask(ID, bar(X), [template(X)])
+                ).
+            handler(success(_ID, Sol, false)) :-
+                pengine_output(Sol).
+            handler(success(ID, Sol, true)) :-
+                pengine_output(Sol),
+                (   pengine_name(ID, foo)
+                ->  pengine_next(bar, [])
+                ;   pengine_name(ID, bar)
+                ->  pengine_next(foo, [])
+                ).
+
+        </script>
+        
+        <script type="text/javascript">
+            function handleCreate() {
+    	        pengine.ask('start');
+		    }
+            function handleOutput() {
+		        $('#out').append(this.data + "<br />");
+		    }
+            function handleError() {
+		        $('#out').append(this.data +"<br />");
+		    }
+            var pengine = new Pengine({
+                oncreate: handleCreate,
+                onoutput: handleOutput,
+                onerror: handleError        
+            });
+        </script>
+        
+    </head>
+    <body>
+        <center style="margin-top:200px;">
+            <div id="out"></div>
+            <div id="err"></div>
+        </center>
+    </body>
+</html>

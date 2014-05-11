@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">   
+    <head>
+        <script src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="/assets/js/pengines.js"></script>
+        <script type="text/x-prolog">
+        
+    	   q(X) :- p(X).
+           
+		   p(a). p(b). p(c). p(d). p(e). p(f). p(g).
+
+           
+        </script>
+        <script>
+            var pengine = new Pengine({
+                oncreate: handleCreate,
+                onsuccess: handleSuccess
+            });
+            function handleCreate () {
+                pengine.ask('q(X)', {
+                    template:'X'
+                });
+            }
+            function handleSuccess() {
+                $('#out').html(this.data);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="out"></div>
+        <button onclick="pengine.next()">Next</button>
+    </body>
+</html>

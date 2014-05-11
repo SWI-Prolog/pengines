@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Pengine Admin</title>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Custom styles for this template -->
+        <link href="css/admin.css" rel="stylesheet">
+        <style>
+            th {
+            font-size: 100%;
+            background-color: lightblue;
+            color: black;
+            } 
+        </style>
+        <script type="text/javascript">
+            function sessions_statistics_table(arr) {
+                var html = '<table class="table table-bordered table-condensed"><tbody>';
+                html += '<tr><th>User</th><th>Real name</th><th>On since</th><th>Idle</th><th>From</th><th>Session ID</th></tr>';
+                for (var i in arr) {
+                    var user = arr[i].user;
+                    var realname = arr[i].realname;
+                    var date = arr[i].date;
+                    var idle = arr[i].idle;
+                    var ip = arr[i].ip;
+                    var sessionid = arr[i].sessionid;
+                    html += '<tr><td>'+user+'</td><td>'+realname+'</td><td>'+date+'</td><td>'+idle+'</td><td>'+ip+'</td><td>'+sessionid+'</td></tr>';
+                }
+                html += '</tbody></table'
+                return html;
+            }
+            
+            
+             function server_statistics_table(arr) {
+                var html = '<table class="table table-bordered table-condensed"><tbody>';
+                html += '<tr><th>Port</th><th>Started</th><th>CPU usage</th><th># workers</th><th># requests</th><th>Bytes sent</th></tr>';
+                for (var i in arr) {
+                    var port = arr[i].port;
+                    var started = arr[i].started;
+                    var cputime = arr[i].cputime + " seconds";
+                    var workers = arr[i].workers;
+                    var requests = arr[i].requests;
+                    var bytes_sent = arr[i].bytes_sent;
+                    html += '<tr><td>'+port+'</td><td>'+started+'</td><td>'+cputime+'</td><td>'+workers+'</td><td>'+requests+'</td><td>'+bytes_sent+'</td></tr>';
+                }
+                html += '</tbody></table'
+                return html;
+            }
+            
+            function reload() {
+                window.location.reload();
+                setTimeout(reload, 10000);
+            }
+                           
+            function start() {
+                $.get('/admin/statistics', function(obj) {
+                    $('#server-statistics').html(server_statistics_table(obj.server));
+                    $('#session-statistics').html(sessions_statistics_table(obj.sessions));
+                });
+                setTimeout(reload, 10000);
+            }
+            
+        </script>
+    </head>
+    <body onload="start()">
+        <div class="container-narrow">
+            <div class="header">
+                <ul class="nav nav-pills pull-right">
+                    <li><a href="/admin/server.html">Server</a></li>
+                    <li><a href="/admin/applications.html">Applications</a></li>
+                    <li class="active"><a href="#">Statistics</a></li>
+                    <li><a href="/admin/account.html">Account</a></li>
+                </ul>
+                <h3 class="text-muted"><a href="/docs/index.html">Pengines</a> Administrator</h3>
+            </div>
+            <h3>Server data</h3>
+            <div id="server-statistics"></div>
+            <h3>Active sessions</h3>
+            <div id="session-statistics"></div>
+            <div class="footer">
+            </div>
+        </div>
+        <!-- /container -->
+    </body>
+</html>

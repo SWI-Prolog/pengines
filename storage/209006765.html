@@ -1,0 +1,62 @@
+<html lang="en">   
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/assets/js/pengines.js"></script>
+        <script type="text/x-prolog">
+    
+            ping_pong :- 
+                pengine_create([ 
+                    src_text("
+                        pinger(Ponger) :- 
+                            pengine_event(Event, []),
+                            pengine_output(Event),
+                            pengine_send(Ponger, ping, [delay(1)]),
+                            pinger(Ponger).
+                ")]),
+                pengine_create([
+                    src_text("
+                        ponger(Pinger) :-
+                            pengine_event(Event, []),
+                            pengine_output(Event),
+                            pengine_send(Pinger, pong, [delay(1)]), 
+                            ponger(Pinger).
+                ")]),
+                pengine_event_loop(handle, []).
+
+            
+            handle(create(Pinger, _)) :-
+                pengine_event(create(Ponger, _), []),
+                pengine_ask(Pinger, pinger(Ponger), []),
+                pengine_ask(Ponger, ponger(Pinger), []),
+                pengine_send(Pinger, serve).
+            handle(event(ID, Term)) :-
+                pengine_output(event(ID, Term)).
+                
+        </script>
+        <script type="text/javascript">
+          
+            function handleCreate() {
+                pengine.ask('ping_pong')
+            }            
+            function handleOutput() {
+                $("#out").html("<h1>" + this.data + "</h1>");
+            }
+            function handleError() {
+                $("#err").html("<h4>Error: " + this.data + "</h4>");
+            }
+            var pengine = new Pengine({
+                oncreate: handleCreate,
+                onoutput: handleOutput,
+                onerror: handleError             
+            });
+        </script>
+    </head>
+    <body>
+        <center style="margin-top:200px;">
+            <div id="out"></div>
+            <button onclick="pengine.abort()">Abort</button>
+            <div id="err"></div>
+        </center>
+    </body>
+</html>

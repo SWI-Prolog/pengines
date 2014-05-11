@@ -1,0 +1,34 @@
+<html lang="en">   
+    <head>
+        <script src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="/assets/js/pengines.js"></script>
+        <script type="text/x-prolog">
+    	   
+            main :-
+                repeat, 
+                pengine_input('Please enter a term, stop with "stop"', X),
+                pengine_output(X),
+                X == stop. 
+                
+        </script>
+        <script>
+		   var pengine = new Pengine({
+                oncreate: handleCreate,
+                onprompt: handlePrompt,
+                onoutput: handleOutput
+            });
+            function handleCreate() {
+                pengine.ask('main');
+		   }
+            function handlePrompt() {
+                pengine.respond(prompt(this.data));
+		   }
+            function handleOutput() {
+                $('#out').html(this.data);
+		   }
+        </script>
+    </head>
+    <body>
+        <div id="out"></div>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<html lang="en">   
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/assets/js/pengines.js"></script>
+
+        <script type="text/javascript">
+            function handleCreate1() {
+    	        pengine1.ask('member(X, [1, 2, 3])');
+		    }
+            function handleCreate2() {
+                pengine2.ask('append(X, Y, [a, b, c])');
+		    }
+            function handleSuccess1() {
+		        var solution = JSON.stringify(this.data);
+				$('#pengine1').append(solution + "<br />");
+				if (!this.more) {
+					$('#pengine1').append("No more solutions<br />");
+				}
+		    }
+    	    function handleSuccess2() {
+		        var solution = JSON.stringify(this.data);
+				$('#pengine2').append(solution + "<br />");
+				if (!this.more) {
+					$('#pengine2').append("No more solutions<br />");
+				}
+		    }
+		    function handleFailure1() {
+		        $('#pengine1').append("Failure<br />");
+		    }
+    	    function handleFailure2() {
+		        $('#pengine2').append("Failure<br />");
+		    }
+            function handleError1() {
+		        $('#pengine1').append(this.data +"<br />");
+		    }
+            function handleError2() {
+    	        $('#pengine2').append(this.data +"<br />");
+		    }
+            var pengine1 = new Pengine({
+                oncreate: handleCreate1,
+                onsuccess: handleSuccess1,
+                onfailure: handleFailure1,
+                onerror: handleError1             
+            });
+            var pengine2 = new Pengine({
+                oncreate: handleCreate2,
+                onsuccess: handleSuccess2,
+                onfailure: handleFailure2,
+                onerror: handleError2               
+            });
+        </script>
+    </head>
+    <body>
+        <center style="margin-top:200px;">
+            <div id="pengine1">
+                <h4>Pengine 1</h4>
+            </div>
+            <div id="pengine2">
+                <h4>Pengine 2</h4>
+            </div>
+            <button onclick="pengine1.next()">Next 1</button>
+            <button onclick="pengine2.next()">Next 2</button>
+            <div id="err"></div>
+        </center>
+    </body>
+</html>

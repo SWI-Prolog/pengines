@@ -1,0 +1,45 @@
+<html lang="en">   
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/assets/js/pengines.js"></script>
+        <script type="text/x-prolog">
+
+
+            assert_and_retract :-
+                forall(between(1, 3, X), assert(p(X))), 
+                retract(p(X)),
+                pengine_output(X),
+                fail.
+            assert_and_retract :-
+                forall(between(1, 3, X), asserta(p(X))), 
+                retract(p(X)),
+                pengine_output(X),
+                fail.
+
+        </script>
+        <script type="text/javascript">
+            var pengine = new Pengine({
+                oncreate: handleCreate,
+                onoutput: handleOutput,
+                onerror: handleError
+            });
+            function handleCreate() {
+                pengine.ask('assert_and_retract');
+            }
+            function handleOutput() {
+                $("#out").append("<h4>" + this.data + "</h4>");
+            }
+            function handleError() {
+                $("#err").append("<h4>Error: " + this.data + "</h4>");
+            }
+        </script>
+    </head>
+    <body>
+        <center style="margin-top:200px;">
+            <div id="out"></div>
+            <button onclick="pengine.abort()">Abort</button>
+            <div id="err"></div>
+        </center>
+    </body>
+</html>

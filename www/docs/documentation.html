@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Pengines</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!-- Bootstrap core CSS -->
+        <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Documentation extras -->
+        <link href="manual_files/docs.css" rel="stylesheet">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="assets/js/html5shiv.js"></script>
+        <![endif]-->
+        <!-- Le fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="http://twitter.github.io/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="http://twitter.github.io/bootstrap/assets/ico/favicon.png">
+        <style>
+            li.L0, li.L1, li.L2, li.L3,
+            li.L5, li.L6, li.L7, li.L8
+            { list-style-type: decimal !important }
+            label {
+                font-weight: bold;
+            }
+            code {
+                color: black;
+            }
+            dd {
+                margin-left: 30px;
+            }
+        </style>
+        <style id="holderjs-style" type="text/css">.holderjs-fluid {font-size:16px;font-weight:bold;text-align:center;font-family:sans-serif;margin:0}</style>
+    </head>
+    <body data-twttr-rendered="true" data-spy="scroll" data-target=".bs-docs-sidebar">
+        <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+            <div class="container">
+                <div class="navbar-header">
+                  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                    <a href="/docs/index.html" class="navbar-brand">Pengines</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="/docs/getting_started.html">Getting started</a>
+                        </li>
+                        <li class="active">
+                            <a href="/docs/documentation.html">Documentation</a>
+                        </li>
+                        <li>
+                            <a href="/apps/scratchpad/index.html">Scratchpad</a>
+                        </li>
+                        <li>
+                            <a href="/apps/swish/index.html">SWISH</a>
+                        </li>
+                        <li>
+                            <a href="/admin/server">Administrator</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div class="bs-header" id="content">
+            <div class="container">
+                <h1>Documentation</h1>
+                <p>Here we document Pengines' JavaScript and Prolog APIs. </p>
+            </div>
+        </div>
+        <div class="container bs-docs-container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="bs-sidebar hidden-print affix-top">
+                        <ul class="nav bs-sidenav">
+                            <li>
+                                <a href="#javascript-api">The JavaScript API</a>
+                                <ul class="nav">
+                                    <li><a href="#javascript-methods">JavaScript methods</a></li>
+                                    <li><a href="#javascript-callbacks">JavaScript callbacks</a></li>
+                                    <li><a href="#javascript-objects">JavaScript response objects</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#prolog-preds">The Prolog API</a></li>
+                            <li><a href="#more-prolog-docs">More Prolog documentation</a></li>
+                        </ul>
+                    </div>
+                </div>  
+                <div class="col-md-9">
+
+                    <!-- API overview
+                        ================================================== -->
+                    <div class="bs-docs-section">
+                        <div class="page-header">
+                            <h1 id="javascript-api">The JavaScript API</h1>
+                        </div>
+                        <h4 id="javascript-methods">JavaScript methods</h4>
+                        <p>The Pengines JavaScript API allows a web application developer to create an instance of the Pengine object like so</p>
+                        <pre>
+var pengine = new Pengine(<em>callbacks</em>);</pre>
+                        <p>providing access to the following methods.</p>
+                        <dl>
+                            <dt><code>pengine.ask(<em>query</em>, <em>options</em>)</code></dt>
+                            <dd>Runs <em>query</em> in search for the first solution. Throws an error if the query is syntactically or semantically malformed or if running it could compromise the safety of the server. <em>options</em> is a JavaScript object contaning zero or more of<br /><br />
+                            <dl>
+                                <dt><code>template: <em>template</em></code></dt>
+                                    <dd><em>template</em> is a string naming a variable (or a term containing variables) shared with the query.</dd>
+                                <dt><code>chunk: <em>integer</em></code></dt>
+                                    <dd>Retrieve solutions in chunks of <em>integer</em> rather than one by one. 1 means no chunking (default). Other integers indicate the maximum number of solutions to retrieve in one chunk.</dd>                                
+                            </dl>
+                            </dd>    
+                            <dt><code>pengine.next()</code></dt>
+                            <dd>Triggers a search for the next solution.</dd>
+                            <dt><code>pengine.stop()</code></dt>
+                            <dd>Stops searching for solutions. Terminates the running query gracefully.</dd>
+                            <dt><code>pengine.respond(<em>string</em> or <em>object</em>)</code></dt>
+                            <dd>Inputs a term in response to a prompt from an invocation of <code>pengine_input/2</code> that is now waiting to receive data from the outside. Throws an error if <em>string</em> cannot be parsed as a Prolog term or if <em>object</em> cannot be serialised into JSON.</dd>
+                            <dt><code>pengine.abort()</code></dt>
+                            <dd>Terminates the running query by force.</dd>
+                            <dt><code>pengine.destroy()</code></dt>
+                            <dd>Destroys the pengine.</dd>
+                        </dl>
+                        <h4 id="javascript-callbacks">JavaScript callbacks</h4>
+                        <p>Here is a list of callbacks that may be defined when creating the Pengines object:</p>
+                        <dl>
+                            <dt><code>oncreate:<em>function</em></code></dt>
+                            <dd>Called when a pengine has been created. The expression <code>this.data</code> in the scope of the function points to an object </dd>
+                            <dt><code>onsuccess:<em>function</em></code></dt>
+                            <dd>Called when the pengine responds with an answer to a query and provides access to variable bindings (if any). The expression <code>this.data</code> in the scope of the function points to a <em>list</em> of objects of the form {<Var>:<Value>, ...}. </dd>
+                            <dt><code>onfailure:<em>function</em></code></dt>
+                            <dd>Called when the pengine fails to find a solution.</dd>
+                            <dt><code>onerror:<em>function</em></code></dt>
+                            <dd>Called when the pengine throws an error.</dd>
+                            <dt><code>onprompt:<em>function</em></code></dt>
+                            <dd>Called when the pengine evaluates the <code>pengine_input/2</code> predicate.</dd>
+                            <dt><code>onoutput:<em>function</em></code></dt>
+                            <dd>Called when the pengine has evaluated the built in <code>pengine_output/1</code> predicate.</dd>
+                            <dt><code>onstop:<em>function</em></code></dt>
+                            <dd>Called when a running query has been successfull stopped.</dd>
+                            <dt><code>onabort:<em>function</em></code></dt>
+                            <dd>Called when a running query has been successfull aborted.</dd>
+                            <dt><code>ondestroy:<em>function</em></code></dt>
+                            <dd>Called when the pengine has been successfully destroyed.</dd>
+                        </dl>
+                        <h4 id="javascript-objects">JavaScript response objects</h4>
+                        <p>The identifier <code>this</code> in the scope of the callback functions holds the object corresponding to the JSON response from the server, i.e. any of these:</p>
+                        <pre>{event:&quot;create&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;} 
+{event:&quot;success&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;, more:&lt;bool&gt;}
+{event:&quot;failure&quot;, id:&lt;ID&gt;}
+{event:&quot;output&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;} 
+{event:&quot;prompt&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;}
+{event:&quot;error&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;}
+{event:&quot;stop&quot;, id:&lt;ID&gt;}
+{event:&quot;abort&quot;, id:&lt;ID&gt;}
+{event:&quot;destroy&quot;, id:&lt;ID&gt;}</pre>
+                        <p>For example, the object corresponding to the second solution to <code>append(Xs, Ys, [a,b,c])</code> is:</p>
+                        <pre>
+{ event:"success",
+  id:1234,
+  data:[{Xs:["a"], Ys:["b","c"]}],
+  more: true,
+}</pre>
+
+                    </div>
+                    
+                    <!-- API overview
+                        ================================================== -->
+                    <div class="bs-docs-section">
+                        <div class="page-header">
+                            <h1 id="prolog-preds">The Prolog API</h1>
+                        </div>
+                        <p>The Prolog API is documented in the following document:
+                            <a href="http://www.swi-prolog.org/pldoc/man?section=pengine-libs">Prolog API</a>
+                        </p>
+                    </div>
+        
+                    <!-- API overview
+                        ================================================== -->
+                    <div class="bs-docs-section">
+                        <div class="page-header">
+                            <h1 id="more-prolog-docs">More Prolog documentation</h1>
+                        </div>                    
+                        <ul>
+                            <li><a href="http://www.swi-prolog.org/pldoc/doc_for?object=manual" target="_newtab">SWI-Prolog documentation</a></li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        
+        <!-- Footer
+            ================================================== -->
+        <footer class="footer">
+            <div class="container">
+            </div>
+        </footer>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="../vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="manual_files/widgets.js"></script>
+        <script src="manual_files/holder.js"></script>
+        <script src="manual_files/application.js"></script>
+    </body>
+</html>
