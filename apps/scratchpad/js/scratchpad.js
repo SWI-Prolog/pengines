@@ -12,18 +12,18 @@ env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
 
 
-// 
+//
 
 function runProgram() {
     var presentation = document.getElementById("presentation").contentWindow;
-    if (presentation.Pengine) presentation.Pengine.destroy_all();
+    if (presentation.Pengine) presentation.Pengine.destroy_all(true);
     presentation.document.open();
     presentation.document.write(getProgram());
     presentation.document.close();
 }
 
 
-// Getting and setting program 
+// Getting and setting program
 
 function getProgram() {
     return env.editor.getValue()
@@ -47,8 +47,8 @@ function print_editor_content() {
     windw.print();
     windw.document.close();
     document.body.removeChild(iframe);
-}	
-	    
+}
+
 
 // GUI preferences
 
@@ -61,19 +61,19 @@ function setTheme(theme) {
 function setFontFamily(family) {
 	$('#editor').css('fontFamily', family);
 	$("#font-family-menu option:selected").prop("selected", false);
-	$("#font-family-menu").find("option[value='" + family +"']").prop("selected", true);	
+	$("#font-family-menu").find("option[value='" + family +"']").prop("selected", true);
 }
 
 function setFontSize(size) {
 	$('#editor').css('fontSize', size + 'px');
 	$("#font-size-menu option:selected").prop("selected", false);
-	$("#font-size-menu").find("option[value=" + size +"]").prop("selected", true);	
+	$("#font-size-menu").find("option[value=" + size +"]").prop("selected", true);
 }
 
 function setTabSize(n) {
 	env.editor.getSession().setTabSize(n);
 	$("#tab-size-menu option:selected").prop("selected", false);
-	$("#tab-size-menu").find("option[value=" + n +"]").prop("selected", true);	
+	$("#tab-size-menu").find("option[value=" + n +"]").prop("selected", true);
 }
 
 function setUseSoftTabs(bool) {
@@ -98,25 +98,25 @@ function setShowGutter(bool) {
 
 
 // Handling programs
-    
+
 function maybeLoadSrc() {
     var file = window.location.hash.slice(1);
     if (file) {
-        loadSrc("/storage/"+ encodeURIComponent(file));            
+        loadSrc("/storage/"+ encodeURIComponent(file));
     }
 }
 
 function loadSrc(url) {
     $.get(url)
     .done(function(program) {
-    		setProgram(program);
+		setProgram(program);
 			env.dirty = false;
 			$('#run-btn').prop('disabled', false)
 			$('#save-btn').prop('disabled', true)
 	})
 	.fail(function() {
 		alert('Error: ' + url + ' does not exist.');
-	}) 
+	})
 }
 
 function saveProgram() {
@@ -152,8 +152,8 @@ function updateProgram() {
 // Event handlers: Editor
 
 env.editor.getSession().on('change', function() {
-	if (!env.dirty) { 
-    	env.dirty = true;
+	if (!env.dirty) {
+	env.dirty = true;
 		$('#run-btn').prop('disabled', true);
 		$('#save-btn').prop('disabled', false);
 		$('#update-btn').prop('disabled', false);
@@ -282,14 +282,14 @@ $("#line-numbering-checkbox").on("change", function() {
 
 $("#run-btn").on("click", runProgram);
 
-$("#save-btn").on("click", saveProgram); 
+$("#save-btn").on("click", saveProgram);
 
-$("#update-btn").on("click", updateProgram);  
+$("#update-btn").on("click", updateProgram);
 
 $("#share-btn").on("click", function() {
     updateProgram();
     $('#share').modal()
-});  
+});
 
 
 
@@ -300,13 +300,13 @@ function parseBoolean(value) {
 $(document).ready(function() {
 	if (localStorage && localStorage.length > 0) {
 		setTheme(localStorage['scratchpad-theme']);
-  	    setFontFamily(localStorage['scratchpad-font-family']);
-  	    setFontSize(localStorage['scratchpad-font-size']);
-  	    setTabSize(parseInt(localStorage['scratchpad-tab-size'], 10));
-  	    setLineWrap(parseBoolean(localStorage['scratchpad-line-wrap']));
-  	    setLineHighlight(parseBoolean(localStorage['scratchpad-line-highlight']));
-  	    setShowGutter(parseBoolean(localStorage['scratchpad-line-numbering']));
-  	    setUseSoftTabs(parseBoolean(localStorage['scratchpad-tab-soft']));
+	    setFontFamily(localStorage['scratchpad-font-family']);
+	    setFontSize(localStorage['scratchpad-font-size']);
+	    setTabSize(parseInt(localStorage['scratchpad-tab-size'], 10));
+	    setLineWrap(parseBoolean(localStorage['scratchpad-line-wrap']));
+	    setLineHighlight(parseBoolean(localStorage['scratchpad-line-highlight']));
+	    setShowGutter(parseBoolean(localStorage['scratchpad-line-numbering']));
+	    setUseSoftTabs(parseBoolean(localStorage['scratchpad-tab-soft']));
 	}
     maybeLoadSrc();
 });
