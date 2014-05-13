@@ -24,7 +24,8 @@ env.cmdline.session.setWrapLimitRange(null, null);
 
 // Calling Prolog
 
-function consult() {
+function first() {
+    if ( env.prolog ) Pengine.destroy_all(true);
     var program = getProgram().trim();
     env.prolog = new Pengine({
         oncreate: handleCreate,
@@ -35,18 +36,19 @@ function consult() {
         onoutput: handleOutput,
         onerror: handleError,
         format: 'json-s',
+	application: "swish",
         src: program
     });
 }
 
-function ask() {  
+function ask() {
     var query = getGoal()
     query = query.replace(/^\?-/, '');
     query = query.trim();
     if (query) {
-    	addmsg(renderQuery(query  + "."), "goal");
-    	updateHistory(query);
-    	env.prolog.ask(query);
+	addmsg(renderQuery(query  + "."), "goal");
+	updateHistory(query);
+	env.prolog.ask(query);
     }
 }
 
@@ -81,7 +83,7 @@ function read() {
         disableButtons(false, true, true, true);
     }
 }
-    
+
 // Handling Prolog callbacks
 
 function handleCreate() {
@@ -101,13 +103,13 @@ function handleSuccess() {
 		disableButtons(true, false, false, false);
 	} else {
 		addmsg(html + ".<br />", "solution");
-		disableButtons(false, true, true, false);   	
-		addmsg("?- ", "goal"); 		
-	}   	
+		disableButtons(false, true, true, false);
+		addmsg("?- ", "goal");
+	}
 }
 function handleFailure() {
 	addmsg("false.<br />", "solution false")
-    disableButtons(false, true, true, false);   	
+    disableButtons(false, true, true, false);
 	addmsg("?- ", "goal");
 }
 function handleStop() {
@@ -124,11 +126,7 @@ function handlePrompt() {
 }
 function handleOutput() {
 	var data = this.data.trim();
-	data = data.replace(/^'/, "");
-	data = data.replace(/'$/, "");
-	data = data.replace(/'<br \/>$/, "<br \/>");
-    addmsg(data, "output");
-    disableButtons(true, true, true, false);
+	addmsg(data, "output");
 }
 function handleError() {
     var html = highlight2("% " + this.data) + "<br />";
@@ -146,6 +144,8 @@ function getProgram() {
 }
 
 function setProgram(src) {
+	if ( env.prolog ) Pengine.destroy_all(true);
+	clear();
 	env.editor.setValue(src, -1);
 }
 
@@ -175,16 +175,16 @@ function addmsg(msg, style) {
 
 function highlight(string) {
     var html = [];
-    var data = env.editor.session.getMode().getTokenizer().getLineTokens(string, "#statement"); 
+    var data = env.editor.session.getMode().getTokenizer().getLineTokens(string, "#statement");
     env.editor.renderer.$textLayer.$renderSimpleLine(html, data.tokens);
-    return html.join("") 
+    return html.join("")
 }
 
 function highlight2(string) {
     var html = [];
-    var data = env.editor.session.getMode().getTokenizer().getLineTokens(string, "start"); 
+    var data = env.editor.session.getMode().getTokenizer().getLineTokens(string, "start");
     env.editor.renderer.$textLayer.$renderSimpleLine(html, data.tokens);
-    return html.join("") 
+    return html.join("")
 }
 
 function theme() {
@@ -230,8 +230,8 @@ function print_editor_content() {
     windw.print();
     windw.document.close();
     document.body.removeChild(iframe);
-}	
-	    
+}
+
 
 // GUI preferences
 
@@ -245,19 +245,19 @@ function setTheme(theme) {
 function setFontFamily(family) {
 	$('#editor, #cmdlineeditor, #presentation, #examples, #history').css('fontFamily', family);
 	$("#font-family-menu option:selected").prop("selected", false);
-	$("#font-family-menu").find("option[value='" + family +"']").prop("selected", true);	
+	$("#font-family-menu").find("option[value='" + family +"']").prop("selected", true);
 }
 
 function setFontSize(size) {
 	$('#editor, #cmdlineeditor, #presentation, #examples, #history').css('fontSize', size + 'px');
 	$("#font-size-menu option:selected").prop("selected", false);
-	$("#font-size-menu").find("option[value=" + size +"]").prop("selected", true);	
+	$("#font-size-menu").find("option[value=" + size +"]").prop("selected", true);
 }
 
 function setTabSize(n) {
 	env.editor.getSession().setTabSize(n);
 	$("#tab-size-menu option:selected").prop("selected", false);
-	$("#tab-size-menu").find("option[value=" + n +"]").prop("selected", true);	
+	$("#tab-size-menu").find("option[value=" + n +"]").prop("selected", true);
 }
 
 function setUseSoftTabs(bool) {
@@ -282,18 +282,18 @@ function setShowGutter(bool) {
 
 
 // Handling programs
-    
+
 function maybeLoadSrc() {
     var file = window.location.hash.slice(1);
     if (file) {
-        loadSrc("/storage/"+ encodeURIComponent(file));            
+        loadSrc("/storage/"+ encodeURIComponent(file));
     }
 }
 
 function loadSrc(url) {
     $.get(url)
     .done(function(program) {
-    		setProgram(program);
+		setProgram(program);
 			var examples = extractExamples()[0];
 			if (examples) {
 				setGoal("?- " + examples[0]);
@@ -305,7 +305,7 @@ function loadSrc(url) {
 	.fail(function() {
 		$("#presentation").html('<div class="alert alert-error"> <button type="button" class="close" data-dismiss="alert">&times;</button> Error: ' + url + ' does not exist.</div>');
 		addmsg("?- ", "goal");
-	}) 
+	})
 }
 
 function saveProgram() {
@@ -411,8 +411,8 @@ function populateHistoryMenu() {
 // Event handlers: Editor
 
 env.editor.getSession().on('change', function() {
-	if (!env.dirty) { 
-    	env.dirty = true;
+	if (!env.dirty) {
+	env.dirty = true;
 		$('#save-btn').prop('disabled', false);
 		$('#update-btn').prop('disabled', false);
 	}
@@ -533,32 +533,31 @@ $("#line-numbering-checkbox").on("change", function() {
 	}
 });
 
-$("#save-btn").on("click", saveProgram); 
+$("#save-btn").on("click", saveProgram);
 
-$("#update-btn").on("click", updateProgram); 
+$("#update-btn").on("click", updateProgram);
 
 $("#share-btn").on("click", function() {
     updateProgram();
     $('#share').modal();
-}); 
+});
 
 
 // Event handlers: Console
- 
+
 $("#examples-btn").on("click", function() {
 	if (env.dirty) {
 		populateExampleMenu();
 	}
-}); 
+});
 
 $("#history-btn").on("click", populateHistoryMenu);
 
 $("#clear-btn-query").on("click", function() {
 	setGoal("?- ")
-}); 
- 
-//$("#ask-btn").on("click", ask);
-$("#ask-btn").on("click", consult);
+});
+
+$("#first-btn").on("click", first);
 $("#more-btn").on("click", more);
 $("#stop-btn").on("click", stop);
 $("#abort-btn").on("click", abort);
@@ -570,7 +569,7 @@ $("#reader").on("keyup", function(evt) {
 	}
 });
 $("#reader").on("blur", function(evt) {
-	evt.target.focus(); 
+	evt.target.focus();
 	return false;
 });
 
