@@ -17,14 +17,8 @@
 :- use_module(lib/admin/server_statistics).
 :- use_module(lib/admin/change_passwd).
 
-:- pengine_application(test).
-:- use_module(test:apps/scratchpad/examples/test_app).
-
-:- pengine_application(mothers).
-:- use_module(mothers:apps/scratchpad/examples/mothers).
-
-:- pengine_application(fathers).
-:- use_module(fathers:apps/scratchpad/examples/fathers).
+:- pengine_application(swish).
+:- use_module(swish:apps/swish/swish).
 
 :- prolog_ide(thread_monitor).
 
