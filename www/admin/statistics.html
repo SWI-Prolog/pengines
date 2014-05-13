@@ -17,26 +17,9 @@
             font-size: 100%;
             background-color: lightblue;
             color: black;
-            } 
+            }
         </style>
         <script type="text/javascript">
-            function sessions_statistics_table(arr) {
-                var html = '<table class="table table-bordered table-condensed"><tbody>';
-                html += '<tr><th>User</th><th>Real name</th><th>On since</th><th>Idle</th><th>From</th><th>Session ID</th></tr>';
-                for (var i in arr) {
-                    var user = arr[i].user;
-                    var realname = arr[i].realname;
-                    var date = arr[i].date;
-                    var idle = arr[i].idle;
-                    var ip = arr[i].ip;
-                    var sessionid = arr[i].sessionid;
-                    html += '<tr><td>'+user+'</td><td>'+realname+'</td><td>'+date+'</td><td>'+idle+'</td><td>'+ip+'</td><td>'+sessionid+'</td></tr>';
-                }
-                html += '</tbody></table'
-                return html;
-            }
-            
-            
              function server_statistics_table(arr) {
                 var html = '<table class="table table-bordered table-condensed"><tbody>';
                 html += '<tr><th>Port</th><th>Started</th><th>CPU usage</th><th># workers</th><th># requests</th><th>Bytes sent</th></tr>';
@@ -52,20 +35,19 @@
                 html += '</tbody></table'
                 return html;
             }
-            
+
             function reload() {
                 window.location.reload();
                 setTimeout(reload, 10000);
             }
-                           
+
             function start() {
                 $.get('/admin/statistics', function(obj) {
                     $('#server-statistics').html(server_statistics_table(obj.server));
-                    $('#session-statistics').html(sessions_statistics_table(obj.sessions));
                 });
                 setTimeout(reload, 10000);
             }
-            
+
         </script>
     </head>
     <body onload="start()">
@@ -81,8 +63,6 @@
             </div>
             <h3>Server data</h3>
             <div id="server-statistics"></div>
-            <h3>Active sessions</h3>
-            <div id="session-statistics"></div>
             <div class="footer">
             </div>
         </div>

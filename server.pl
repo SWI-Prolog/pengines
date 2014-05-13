@@ -4,7 +4,6 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
-:- use_module(library(http/http_session)).
 :- use_module(library(http/http_cookie)).
 :- use_module(library(http/http_server_files)).
 :- use_module(library(debug)).

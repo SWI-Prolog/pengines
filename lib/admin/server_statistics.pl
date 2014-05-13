@@ -31,7 +31,6 @@
 :- module(server_statistics, []).
 :- use_module(library(option)).
 :- use_module(library(pairs)).
-:- use_module(library(http/http_session)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
@@ -43,88 +42,24 @@
 
 
 statistics(_Request) :-
-    sessions(Sessions),
     server_statistics(Servers),
-    reply_json(json([sessions=Sessions, server=Servers])).
-    
-
-%%	sessions/1 is det
-%
-%	
-
-sessions(Sessions) :-
-	findall(S, session(S), Sessions0),
-	sort(Sessions0, Sessions1),
-	sessions(Sessions1, Sessions).
-	
-
-%%	session(-Session:s(Idle, User, SessionID, Peer)) is nondet.
-%
-%	Enumerate all current HTTP sessions.
-
-session(s(Idle, User, SessionID, Peer)) :-
-	http_current_session(SessionID, peer(Peer)),
-	http_current_session(SessionID, idle(Idle)),
-	(   false %user_property(User, session(SessionID))
-	->  true
-	;   User = (-)
-	).
-	
-
-sessions([], []).
-sessions([H|T], [Json|List]) :-
-	session2(H, Json),
-	sessions(T, List).
-
-session2(s(Idle0, -, SessionID, Peer0), json([user= -, realname= -, date= -, idle=Idle, ip=Peer, sessionid=SessionID])) :- !,
-    idle(Idle0, Idle),
-    ip(Peer0, Peer).
-/*
-session2(s(Idle0, User, SessionID, Peer0), json([user=User, realname=RealName, date=Date, idle=Idle, ip=Peer, sessionid=SessionID])) :-
-	(   user_property(User, realname(RealName))
-	->  true
-	;   RealName = '?'
-	),
-	(   user_property(User, connection(OnSince, _Idle))
-	->  true
-	;   OnSince = 0
-	),
-    idle(Idle0, Idle),
-    ip(Peer0, Peer),
-    date(OnSince, Date).
-*/    
-
-idle(Time, Atom) :-
-	Secs is round(Time),
-	Min is Secs // 60,
-	Sec is Secs mod 60,
-	format(atom(Atom), '~`0t~d~2|:~`0t~d~5|', [Min, Sec]).
-
-date(Date, Atom) :-
-	format_time(atom(Atom), '%+', Date).
-
-ip(ip(A,B,C,D), Atom) :- !,
-	format(atom(Atom), '~d.~d.~d.~d', [A,B,C,D]).
-ip(IP, Atom) :-
-	format(atom(Atom),'~w', [IP]).
-
-
+    reply_json(json([server=Servers])).
 
 %%	server_statistics
 %
-%	
+%
 
 server_statistics(Servers) :-
 	findall(Port-ID, http_current_worker(Port, ID), Workers),
 	group_pairs_by_key(Workers, Servers0),
 	servers_stats(Servers0, Servers).
-	
+
 
 servers_stats([], []).
 servers_stats([H|T], [Json|List]) :-
-	server_stats2(H, Json), 
+	server_stats2(H, Json),
 	servers_stats(T, List).
-	
+
 
 :- if(catch(statistics(process_cputime, _),_,fail)).
 cputime(CPU) :- statistics(process_cputime, CPU).
@@ -138,8 +73,8 @@ server_stats2(Port-Workers, json([port=Port, started=ST, cputime=CPU, workers=N|
 	format_time(string(ST), '%+', StartTime),
 	cputime(CPU),
 	request_statistics(Rest).
-	
-	    
+
+
 :- if(source_exports(library(http/http_stream), cgi_statistics/1)).
 :- use_module(library(http/http_stream)).
 request_statistics(Rest) :-
