@@ -10,6 +10,11 @@ See library(http/http_unix_daemon) for details.  The directory =upstart=
 contains an Ubuntu Linux upstart script.  Perform the following steps to
 make this work:
 
+ - Make sure this file (=daemon.pl=) is executable and that the #!
+   points to SWI-Prolog version 7.1.14 or later.  Test this by running
+
+     % ./daemon.pl --help
+
  - copy upstart/pengines.conf to /etc/init
  - edit /etc/init/pengines.conf, notably the `chdir` line to point to
    this directory.
@@ -29,6 +34,10 @@ make this work:
 :- use_module(library(http/http_log)).
 
 :- set_setting_default(http:logfile, 'log/httpd.log').
+
+%%	memlimit
+%
+%	Limit the memory usage of the pengine server (to 8Gb).
 
 memlimit :-
    catch(rlimit(as, _, 8 000 000 000), E,
