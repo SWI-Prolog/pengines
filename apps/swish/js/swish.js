@@ -91,6 +91,11 @@ function handleCreate() {
     ask();
 }
 
+function queryDone() {
+    addmsg('<hr class="done"/>', "done");
+    disableButtons(false, true, true, true);
+}
+
 function handleSuccess() {
     var html;
 	var bindings = this.data[0];
@@ -104,15 +109,15 @@ function handleSuccess() {
 		disableButtons(true, false, false, false);
 	} else {
 		addmsg(html + ".<br />", "solution");
-		disableButtons(false, true, true, false);
+		queryDone();
 	}
 }
 function handleFailure() {
-	addmsg("false.<br />", "solution false")
-    disableButtons(false, true, true, false);
+    addmsg("false.<br />", "solution false")
+    queryDone();
 }
 function handleStop() {
-    disableButtons(false, true, true, false);
+    queryDone();
 }
 function handlePrompt() {
     var reader = $("#reader");
@@ -128,11 +133,11 @@ function handleOutput() {
 }
 function handleError() {
     addmsg('<pre class="msg-error">'+this.data+'</pre>', "solution");
-    disableButtons(false, true, true, true);
+    queryDone();
 }
 function handleAbort() {
     addmsg('<pre class="msg-error">'+"Execution aborted"+'</pre>', "solution");
-    disableButtons(false, true, true, true);
+    queryDone();
 }
 
 
