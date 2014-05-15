@@ -48,6 +48,7 @@ function ask() {
     if (query) {
 	addmsg(renderQuery(query  + "."), "goal");
 	updateHistory(query);
+	disableButtons(true, false, false, false);
 	env.prolog.ask(query);
     }
 }
