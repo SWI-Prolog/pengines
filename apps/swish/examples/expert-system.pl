@@ -12,10 +12,9 @@ prove(H) :-
     prove(B).
 prove(H) :-
     askable(H),
-    term_to_atom(H, Q),
-	pengine_output(Q),
-    pengine_input(Answer),
-	Answer = yes.
+    writeln(H),
+    read(Answer),
+	Answer == yes.
 
 
 good_pet(X) :- bird(X), small(X).
