@@ -4,18 +4,19 @@
 
 
 hello_world :-
-    pengine_output('Hello World!'),
+    writeln('Hello World!'),
+    sleep(1),
     hello_world.
-    
 
 
 read_and_write :-
-    repeat,
-    pengine_input(Something),
-    pengine_output(Something),
-    Something = stop.
+    read(Something),
+    (   Something == stop
+    ->  true
+    ;   writeln(Something),
+        read_and_write
+    ).
 
- 
 
 /** Examples
 
