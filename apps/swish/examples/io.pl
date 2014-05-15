@@ -10,6 +10,7 @@ hello_world :-
 
 
 read_and_write :-
+    prompt(_, 'Echo this term'),
     read(Something),
     (   Something == stop
     ->  true
