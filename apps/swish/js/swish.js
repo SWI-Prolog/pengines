@@ -123,7 +123,7 @@ function handlePrompt() {
     var reader = $("#reader");
     reader.prop("disabled", false);
     reader.focus();
-    $("#reader").placeholder = this.data;
+    $("#reader").prop("placeholder", this.data);
     $("#reader").css('background-color', 'rgb(252, 248, 227)');
     disableButtons(true, true, true, false);
 }
