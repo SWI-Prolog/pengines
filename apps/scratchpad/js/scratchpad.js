@@ -14,6 +14,11 @@ env.editor.session.setFoldStyle("manual");
 
 //
 
+function clearContent() {
+    var presentation = document.getElementById("presentation");
+    presentation.src = "about:blank";
+}
+
 function runProgram() {
     var presentation = document.getElementById("presentation").contentWindow;
     if (presentation.Pengine) presentation.Pengine.destroy_all(true);
@@ -165,6 +170,7 @@ env.editor.getSession().on('change', function() {
 
 $("#example-menu").on("click", "a", function(evt) {
 	evt.preventDefault();
+	clearContent();
 	loadSrc(evt.target.href);
 });
 
