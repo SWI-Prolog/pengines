@@ -4,22 +4,17 @@
         <script src="/pengine/pengines.js"></script>
         <script type="text/x-prolog">
 
-	   q(X) :- p(X).
+	        q(X) :- p(X).
 
-		   p(a). p(b). p(c). p(d). p(e). p(f). p(g).
-
+		    p(a). p(b). p(c). p(d). p(e). p(f). p(g).
 
         </script>
         <script>
             var pengine = new Pengine({
-                oncreate: handleCreate,
+                ask: 'q(X)',
+                template: 'X',
                 onsuccess: handleSuccess
             });
-            function handleCreate () {
-                pengine.ask('q(X)', {
-                    template:'X'
-                });
-            }
             function handleSuccess() {
                 $('#out').html(this.data);
                 if ( !this.more ) {
