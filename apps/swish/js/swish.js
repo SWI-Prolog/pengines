@@ -81,6 +81,7 @@ function read() {
         reader.val("");
         reader.prop("disabled", true);
         reader.css("background-color", "white");
+	reader.prop("placeholder", "");
         disableButtons(false, true, true, true);
     }
 }
