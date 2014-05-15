@@ -131,15 +131,11 @@ function handleOutput() {
 	addmsg(data, "output");
 }
 function handleError() {
-    var html = highlight2("% " + this.data) + "<br />";
-    addmsg('<div class="error">'+html+'</div>', "solution");
-    addmsg("?- ", "goal");
+    addmsg('<pre class="msg-error">'+this.data+'</pre>', "solution");
     disableButtons(false, true, true, true);
 }
 function handleAbort() {
-    var html = highlight2("% Execution aborted") + "<br />";
-    addmsg('<div class="error">'+html+'</div>', "solution");
-    addmsg("?- ", "goal");
+    addmsg('<pre class="msg-error">'+"Execution aborted"+'</pre>', "solution");
     disableButtons(false, true, true, true);
 }
 
