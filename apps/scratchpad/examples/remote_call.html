@@ -5,47 +5,25 @@
         <script type="text/javascript" src="/pengine/pengines.js"></script>
         <script type="text/x-prolog">
 
-            /*  
-            */
-
             test :- 
                 pengine_output('<hr>Test 1<hr>'),
-                pengine_rpc('http://localhost:3020', member(X, [a, b, c])),
+                pengine_rpc('http://pengines.swi-prolog.org', member(X, [a, b, c])),
                 pengine_output(X),
                 fail.
             test :- 
                 pengine_output('<hr>Test 2<hr>'),
-                pengine_rpc('http://localhost:3020', member(X, [d, e, f])),
-                member(X, [e, f, g]),
-                pengine_output(X),
-                fail.
-            test :- 
-                pengine_output('<hr>Test 3<hr>'),
-                pengine_rpc('http://localhost:3020', a(X), [
+                pengine_rpc('http://pengines.swi-prolog.org', a(X), [
                     src_text("a(1). a(2). a(3).")
                 ]),
                 pengine_output(X),
                 fail.
-            test :- 
-                pengine_output('<hr>Test 4<hr>'),
-                pengine_rpc('http://localhost:3020', findall(X, member(X, [h, i , j]), Xs)),
-                pengine_output(Xs),
-                fail.
-            test :- 
-                pengine_output('<hr>Test 5<hr>'),
-                findall(X, pengine_rpc('http://localhost:3020', member(X, [k, l, m])), Xs),
-                pengine_output(Xs),
-                fail.
-                
+
         </script>
         <script type="text/javascript">
             var pengine = new Pengine({
-                oncreate: handleCreate,
+                ask: 'test',
                 onoutput: handleOutput
             });
-            function handleCreate() {
-                pengine.ask('test');
-            }
             function handleOutput() {
                 $("#out").append("<p>" + this.data + "</p>");
             }
