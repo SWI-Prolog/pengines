@@ -210,7 +210,7 @@ function renderBindings(bindings) {
 }
 
 function disableButtons(ask, more, stop, abort) {
-    $("#ask-btn").prop("disabled", ask);
+    $("#first-btn").prop("disabled", ask);
     $("#more-btn").prop("disabled", more);
     $("#stop-btn").prop("disabled", stop);
     $("#abort-btn").prop("disabled", abort);
