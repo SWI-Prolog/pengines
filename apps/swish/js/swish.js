@@ -47,7 +47,7 @@ function ask() {
     query = query.replace(/^\?-/, '');
     query = query.trim();
     if (query) {
-	addmsg(renderQuery(query  + "."), "goal");
+	addmsg(renderQuery("?- " + query  + "."), "goal");
 	updateHistory(query);
 	disableButtons(true, false, false, false);
 	env.prolog.ask(query);
@@ -70,7 +70,6 @@ function abort() {
 
 function clear() {
     $("#presentation").html("");
-    addmsg("?- ", "goal");
 }
 
 function read() {
@@ -106,16 +105,13 @@ function handleSuccess() {
 	} else {
 		addmsg(html + ".<br />", "solution");
 		disableButtons(false, true, true, false);
-		addmsg("?- ", "goal");
 	}
 }
 function handleFailure() {
 	addmsg("false.<br />", "solution false")
     disableButtons(false, true, true, false);
-	addmsg("?- ", "goal");
 }
 function handleStop() {
-    addmsg("?- ", "goal");
     disableButtons(false, true, true, false);
 }
 function handlePrompt() {
@@ -594,7 +590,6 @@ $(document).ready(function() {
 		setUseSoftTabs(parseBoolean(localStorage['swish-tab-soft']));
 	}
     maybeLoadSrc();
-    addmsg("?- ", "goal");
-	setGoal("?- ");
+    setGoal("?- ");
 });
 
