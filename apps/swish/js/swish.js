@@ -155,6 +155,7 @@ function setProgram(src) {
 	if ( env.prolog ) Pengine.destroy_all(true);
 	clear();
 	env.editor.setValue(src, -1);
+	disableButtons(false, true, true, true);
 }
 
 function getGoal() {
