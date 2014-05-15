@@ -5,12 +5,6 @@
         <script type="text/javascript" src="/pengine/pengines.js"></script>
 
         <script type="text/javascript">
-            function handleCreate1() {
-    	        pengine1.ask('member(X, [1, 2, 3])');
-		    }
-            function handleCreate2() {
-                pengine2.ask('append(X, Y, [a, b, c])');
-		    }
             function handleSuccess1() {
 		        var solution = JSON.stringify(this.data);
 				$('#pengine1').append(solution + "<br />");
@@ -38,13 +32,13 @@
     	        $('#pengine2').append(this.data +"<br />");
 		    }
             var pengine1 = new Pengine({
-                oncreate: handleCreate1,
+                ask: 'member(X, [1, 2, 3])',
                 onsuccess: handleSuccess1,
                 onfailure: handleFailure1,
                 onerror: handleError1             
             });
             var pengine2 = new Pengine({
-                oncreate: handleCreate2,
+                ask: 'append(X, Y, [a, b, c])',
                 onsuccess: handleSuccess2,
                 onfailure: handleFailure2,
                 onerror: handleError2               
