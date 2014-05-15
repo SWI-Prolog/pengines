@@ -35,6 +35,7 @@ function first() {
         onprompt: handlePrompt,
         onoutput: handleOutput,
         onerror: handleError,
+        onabort: handleAbort,
         format: 'json-s',
 	application: "swish",
         src: program
@@ -131,9 +132,15 @@ function handleOutput() {
 }
 function handleError() {
     var html = highlight2("% " + this.data) + "<br />";
-    addmsg(html, "solution");
+    addmsg('<div class="error">'+html+'</div>', "solution");
     addmsg("?- ", "goal");
-    disableButtons(false, true, true, false);
+    disableButtons(false, true, true, true);
+}
+function handleAbort() {
+    var html = highlight2("% Execution aborted") + "<br />";
+    addmsg('<div class="error">'+html+'</div>', "solution");
+    addmsg("?- ", "goal");
+    disableButtons(false, true, true, true);
 }
 
 
