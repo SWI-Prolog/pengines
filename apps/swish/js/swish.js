@@ -76,8 +76,8 @@ function read() {
     var reader = $("#reader");
     var str = reader.val();
     if (str) {
+        str = str.replace(/\. *$/, '');
         env.prolog.respond(str);
-        $('#prompt').html("|:");
         reader.val("");
         reader.prop("disabled", true);
         reader.css("background-color", "white");
