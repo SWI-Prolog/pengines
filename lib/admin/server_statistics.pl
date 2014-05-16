@@ -35,11 +35,13 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/http_stream)).
 :- use_module(library(pengines)).
-%:- use_module(user_db).
-
 
 :- http_handler(root(statistics), statistics, []).
 
+%%	statistics(+Request)
+%
+%	HTTP handler that returns a JSON object describing the server
+%	state.
 
 statistics(_Request) :-
     server_statistics(Stats),
