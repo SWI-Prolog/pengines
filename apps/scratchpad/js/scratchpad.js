@@ -36,6 +36,9 @@ function getProgram() {
 
 function setProgram(src) {
 	env.editor.setValue(src, -1);
+	env.dirty = false;
+	$('#run-btn').prop('disabled', false);
+	$('#save-btn').prop('disabled', true);
 }
 
 // Printing
@@ -115,9 +118,6 @@ function loadSrc(url) {
     $.get(url)
     .done(function(program) {
 		setProgram(program);
-			env.dirty = false;
-			$('#run-btn').prop('disabled', false)
-			$('#save-btn').prop('disabled', true)
 	})
 	.fail(function() {
 		alert('Error: ' + url + ' does not exist.');
@@ -174,6 +174,36 @@ $("#example-menu").on("click", "a", function(evt) {
 	loadSrc(evt.target.href);
 });
 
+$("#file-menu").on("click", "a#new", function(evt) {
+	evt.preventDefault();
+	setProgram("<html>\n"+
+		   "  <head>\n"+
+		   "    <script src=\"/vendor/jquery/jquery-2.0.3.min.js\"></script>\n"+
+		   "    <script src=\"/pengine/pengines.js\"></script>\n"+
+		   "    <script type=\"text/x-prolog\">\n\n"+
+		   "      % Your Prolog code goes here\n\n"+
+		   "	</script>\n"+
+		   "    <script>\n"+
+		   "      var pengine = new Pengine({\n"+
+		   "        ask: \"member(X,[pippi])\",         // Your goal goes here\n"+
+		   "        template: 'X',                    // The variables you are interested in\n"+
+		   "        onsuccess: handleSuccess,\n"+
+		   "      });\n"+
+		   "	  function handleSuccess() {\n"+
+		   "	    alert(JSON.stringify(this.data)); // handle results\n"+
+		   "	  }\n"+
+		   "    </script>\n"+
+		   "  </head>\n"+
+		   "  <body>\n"+
+		   "  </body>\n"+
+		   "</html>\n");
+});
+
+$("#file-menu").on("click", "a#collaborate", function(evt) {
+	evt.preventDefault();
+	TogetherJS(this);
+});
+
 $("#file-menu").on("click", "a#prefs", function(evt) {
 	evt.preventDefault();
 	$("#preferences").modal({backdrop:false});
@@ -213,12 +243,6 @@ $("#edit-menu").on("click", "a#find", function(evt) {
 	evt.preventDefault();
 	env.editor.commands.commands.replace.exec(env.editor, "left")
 });
-
-$("#help-menu").on("click", "a#collaborate", function(evt) {
-	evt.preventDefault();
-	TogetherJS(this);
-});
-
 
 // Event handlers: Preferences
 
