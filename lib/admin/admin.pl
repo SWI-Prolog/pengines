@@ -5,6 +5,7 @@
 :- use_module(library(http/http_parameters)).
 :- use_module(library(pairs)).
 :- use_module(library(settings)).
+:- use_module(library(pengines)).
 
 
 :- http_handler(root(admin/show_settings), show_settings, []).
@@ -20,9 +21,9 @@ show_settings(Request) :-
             ]),
     (	Type == server
     ->	findall(M-N, (current_setting(M:N), server_properties(M)), List)
-	;	Type == applications
-	->	findall(M-N, (current_setting(M:N), \+server_properties(M)), List)
-	),
+    ;	Type == applications
+    ->	findall(M-N, (current_setting(M:N), application_properties(M)), List)
+    ),
     keysort(List, Sorted0),
     delete(Sorted0, pengine-_, Sorted),
     group_pairs_by_key(Sorted, ByModule),
@@ -30,10 +31,11 @@ show_settings(Request) :-
     reply_json(json([settings=JsonByModule])).
 
 
-server_properties(http).    
+server_properties(http).
 server_properties(storage).
-server_properties(listing).
 
+application_properties(Module) :-
+	current_pengine_application(Module).
 
 show_modules([], []).
 show_modules([M-List|T], [Json|JsonList]) :-
@@ -50,7 +52,7 @@ show_settings([], _, []).
 show_settings([H|T], Module, [Json|JsonList]) :-
 	show_setting(H, Module, Json),
 	show_settings(T, Module, JsonList).
-    
+
 show_setting(H, Module, json([comment=Comment, type=Type, name=Name, value=Value, default=Default])) :-
 	setting_property(Module:H, comment(Comment)),
 	setting_property(Module:H, type(Type0)),
@@ -95,10 +97,10 @@ set_settings(Request) :-
     ;   message_to_string(Error, Msg),
         reply_json(json([error= @true, msg=Msg, name=Name]))
     ).
-    
-    
-   
-    
-    
-    
-    
+
+
+
+
+
+
+
