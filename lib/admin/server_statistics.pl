@@ -29,30 +29,37 @@
 */
 
 :- module(server_statistics, []).
-:- use_module(library(option)).
 :- use_module(library(pairs)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
-:- use_module(library(http/http_parameters)).
+:- use_module(library(http/http_stream)).
+:- use_module(library(pengines)).
 %:- use_module(user_db).
 
 
-:- http_handler(root(admin/statistics), statistics, []).
+:- http_handler(root(statistics), statistics, []).
 
 
 statistics(_Request) :-
-    server_statistics(Servers),
-    reply_json(json([server=Servers])).
+    server_statistics(Stats),
+    reply_json(Stats).
 
 %%	server_statistics
 %
 %
 
-server_statistics(Servers) :-
+server_statistics(_{ servers:Servers,
+		     requests:Count,
+		     bytes_sent:Sent,
+		     pengines:Pengines
+		   }) :-
 	findall(Port-ID, http_current_worker(Port, ID), Workers),
 	group_pairs_by_key(Workers, Servers0),
-	servers_stats(Servers0, Servers).
+	servers_stats(Servers0, Servers),
+	cgi_statistics(requests(Count)),
+	cgi_statistics(bytes_sent(Sent)),
+	pengine_statistics(Pengines).
 
 
 servers_stats([], []).
@@ -61,96 +68,39 @@ servers_stats([H|T], [Json|List]) :-
 	servers_stats(T, List).
 
 
-:- if(catch(statistics(process_cputime, _),_,fail)).
-cputime(CPU) :- statistics(process_cputime, CPU).
-:- else.
-cputime(CPU) :- statistics(cputime, CPU).
-:- endif.
-
-server_stats2(Port-Workers, json([port=Port, started=ST, cputime=CPU, workers=N|Rest])) :-
+server_stats2(Port-Workers,
+	      _{port:Port, started:ST, cputime:CPU, workers:N}) :-
 	length(Workers, N),
 	http_server_property(Port, start_time(StartTime)),
 	format_time(string(ST), '%+', StartTime),
-	cputime(CPU),
-	request_statistics(Rest).
+	statistics(process_cputime, CPU).
 
+%%	pengine_statistics(-Stats) is det.
+%
+%	Stats is a list of dicts holding statistics per running pengine.
 
-:- if(source_exports(library(http/http_stream), cgi_statistics/1)).
-:- use_module(library(http/http_stream)).
-request_statistics(Rest) :-
-	cgi_statistics(requests(Count)),
-	cgi_statistics(bytes_sent(Sent)),
-	Rest = [requests=Count, bytes_sent=Sent].
-:- else.
-request_statistics([requests='n/a', bytes_sent='n/a']).
-:- endif.
+pengine_statistics(Stats) :-
+	findall(Stat, pengine_stats(_Pengine, Stat), Stats).
 
-/*
+pengine_stats(Pengine, Stats) :-
+	pengine_property(Pengine, self(_)),
+	catch(pengine_stats2(Pengine, Stats), _, fail).
 
-
-
-	html([ \server_stat('Port:', Port, odd),
-	       \server_stat('Started:', ST, even),
-	       \server_stat('Total CPU usage:', [\n('~2f',CPU), ' seconds'], odd),
-	       \request_statistics,
-	       \server_stat('# worker threads:', NWorkers, odd),
-	       tr(th(colspan(6), 'Statistics by worker')),
-	       tr([ th('Thread'),
-		    th('CPU'),
-		    th(''),
-		    th('Local'),
-		    th('Global'),
-		    th('Trail')
-		  ]),
-	       \http_workers(Workers, odd)
-	     ]).
-
-
-
-:- if(source_exports(library(http/http_stream), cgi_statistics/1)).
-:- use_module(library(http/http_stream)).
-request_statistics -->
-	{ cgi_statistics(requests(Count)),
-	  cgi_statistics(bytes_sent(Sent))
-	},
-	server_stat('Requests processed:', \n(human, Count), odd),
-	server_stat('Bytes sent:', \n(human, Sent), even).
-:- else.
-request_statistics --> [].
-:- endif.
-
-
-http_workers([], _) -->
-	[].
-http_workers([H|T], OE) -->
-	{ odd_even(OE, OE2) },
-	http_worker(H, OE),
-	http_workers(T, OE2).
-
-http_worker(H, OE) -->
-	{ thread_statistics(H, locallimit, LL),
-	  thread_statistics(H, globallimit, GL),
-	  thread_statistics(H, traillimit, TL),
-	  thread_statistics(H, localused, LU),
-	  thread_statistics(H, globalused, GU),
-	  thread_statistics(H, trailused, TU),
-	  thread_statistics(H, cputime, CPU)
-	},
-	html([ tr(class(OE),
-		  [ td(rowspan(2), H),
-		    \nc('~3f', CPU, [rowspan(2)]),
-		    th('In use'),
-		    \nc(human, LU),
-		    \nc(human, GU),
-		    \nc(human, TU)
-		  ]),
-	       tr(class(OE),
-		  [ th('Limit'),
-		    \nc(human, LL),
-		    \nc(human, GL),
-		    \nc(human, TL)
-		  ])
-	     ]).
-
-*/
-
+pengine_stats2(Pengine, pengine{type:remote, application:App}) :-
+	pengine_property(Pengine, remote(_Server)), !,
+	pengine_property(Pengine, application(App)).
+pengine_stats2(Pengine,
+	      pengine{type:local,
+		      application:App,
+		      cputime:CPU,
+		      stacks:_{ global:Global,
+				local:Local,
+				trail:Trail
+			      }
+		     }) :- !,
+	pengine_property(Pengine, application(App)),
+	pengine_property(Pengine, thread(Thread)),
+	thread_statistics(Thread, cputime,    CPU),
+	thread_statistics(Thread, globalused, Global),
+	thread_statistics(Thread, localused,  Local),
+	thread_statistics(Thread, trailused,  Trail).
