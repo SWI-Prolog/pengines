@@ -438,6 +438,11 @@ $("#file-menu").on("click", "a#prefs", function(evt) {
 	$("#preferences").modal({backdrop:false});
 });
 
+$("#file-menu").on("click", "a#new", function(evt) {
+	evt.preventDefault();
+	setProgram("% Your program goes here\n\n\n/** Examples\n\n*/\n");
+});
+
 $("#file-menu").on("click", "a#print", function(evt) {
 	evt.preventDefault();
 	print_editor_content();
