@@ -18,7 +18,7 @@
                 html += '</tbody></table'
                 return html;
             }
-            
+
             function widget(name, type, value) {
                 if (type === 'atom' || type === 'number' || type === 'integer' || type === 'nonneg') {
                     return "<input id='" + name + "' style='width:100px' type='text' value='" + value + "'>"
@@ -40,10 +40,10 @@
                 } else if (type.kind === 'compoundlist') {
                     return "<input id='" + name + "' style='width:100px' type='text' value='" + value + "'>"
                 } else {
-                    alert('Unrecognized type:' + type) 
+                    return "<input id='" + name + "' style='width:100px' type='text' value='" + value + "'>"
                 }
             }
-            
+
             function install_handlers(arr) {
                 for (var i in arr) {
                     var settings = arr[i].settings;
@@ -56,11 +56,11 @@
                         $("#"+name).change(function(e) {
                             $("#"+e.target.id+"-btn").prop('disabled', false);
                             $("#"+e.target.id+"-def").prop('disabled', false);
-                        })                        
+                        })
                     }
                 }
             }
-            
+
             function set_setting(name) {
                 $("#alert").remove();
                 var value = $("#"+name).val();
@@ -85,10 +85,10 @@
                     })
                 } else {
                     $("#"+name+"-row").after('<tr id="alert"><td colspan="4"><div class="alert alert-danger">Error: The empty string is not a permissible value.</div></td></tr>')
-                }     
+                }
             }
-            
-            
+
+
             function set_default(name, defaul) {
                 if (defaul == "*") { // This is a mystery!!! Should really be "[*]". Bug in jQuery?
                     var defaul = "["+defaul+"]";
