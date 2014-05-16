@@ -49,7 +49,7 @@ function ask() {
     if (query) {
 	addmsg(renderQuery("?- " + query  + "."), "goal");
 	updateHistory(query);
-	disableButtons(true, false, false, false);
+	disableButtons(true, true, true, false);
 	env.prolog.ask(query);
     }
 }
@@ -107,7 +107,7 @@ function handleSuccess() {
 	}
 	if (this.more) {
 		addmsg(html, "solution");
-		disableButtons(true, false, false, false);
+		disableButtons(true, false, false, true);
 	} else {
 		addmsg(html + ".<br />", "solution");
 		queryDone();
