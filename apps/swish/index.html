@@ -164,10 +164,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">×</button>
-                        <h4 id="myModalLabel2">About <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span><span class="pull-right">Version 0.8&nbsp;&nbsp;</span></h4>
+                        <h4 id="myModalLabel2">About <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span><span class="pull-right">Version 0.9&nbsp;&nbsp;</span></h4>
                     </div>
                     <div class="modal-body">
-                        <p><span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is an homage to SWI-Prolog, written by Torbjörn Lager, Professor of General and Computational Linguistics at the <a target="_blank" href="http://www.flov.gu.se/">Department of Philosopy, Linguistics and Theory of Science</a> at the <a target="_blank" href="http://www.gu.se/">University of Gothenburg</a>. Also member of the <a target="_blank" href="http://www.clt.gu.se/">Center for Language Technology</a> in Gothenburg, and sadly just about the only one there who still cares about Prolog. Taught himself Prolog when as a student he started doing computational linguistics back in 1986, used SICStus Prolog for many years, then left Prolog for some time while exploring languages such as Oz, Python and JavaScript. Got interested in the Web and thus drifted back to using Prolog and... SWI-Prolog this time! Because if your are interested in both Prolog and the Web, there really is no better tool than SWI-Prolog. Thank you Jan.
+                        <p><span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is part of the Pengines platform.
                         </p>
                     </div>
                 </div>
@@ -188,7 +188,6 @@
                     <li><a href="#time_limit">Time limit</a></li>
                     <li><a href="#known_issues">Known issues</a></li>
                     <li><a href="#technology">Technology</a></li>
-                    <li><a href="#license">License</a></li>
                     <li><a href="#source_code">Source code</a></li>
                 </ul>
                 <h4 id="motivation">Motivation</h4>
@@ -214,7 +213,7 @@ jealous(X, Y).
 */</pre>
                 <h4 id="time_limit">Time limit</h4>
                 <p>
-                    When you click the First button, your goal will be allowed to execute on the server for 15 seconds before aborting and returning with a message stating that the time limit has been exceeded. The plan is to increase this limit in the future.
+                    When you click the First button, your goal will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded. The plan is to increase this limit in the future.
                 </p>
                 <h4 id="known_issues">Known issues</h4>
                 <p>
@@ -226,15 +225,12 @@ jealous(X, Y).
                 </ul>
                 <h4 id="technology">Technology</h4>
                 <p>
-                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://twitter.github.io/bootstrap/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side. To me that looks like the cleanest interface between a server and a client one can hope to get on the web.
+                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://twitter.github.io/bootstrap/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side.
                 </p>
-                <h4 id="license">License</h4>
-                <p>
-                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> may only be distributed using the GNU General Public License. See <a target="_blank" href="http://www.swi-prolog.org/license.html">here</a> for details on SWI-Prolog licensing policies supporting both free and non-free software.
-                </p>
+
                 <h4 id="source_code">Source code</h4>
                 <p>
-                    The source code for <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is available in the Pengine distribution on <a target="_blank" href="https://github.com/spyderbrain/pengine">GitHub</a>.
+                    The source code for <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is available in the Pengine distribution on <a target="_blank" href="https://github.com/SWI-Prolog/pengines">GitHub</a>.
                 </p>
             </div>
         </div>
