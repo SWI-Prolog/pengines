@@ -133,11 +133,11 @@ function handleOutput() {
 	addmsg(data, "output");
 }
 function handleError() {
-    addmsg('<pre class="msg-error">'+this.data+'</pre>', "solution");
+    addmsg(this.data, "error");
     queryDone();
 }
 function handleAbort() {
-    addmsg('<pre class="msg-error">'+"Execution aborted"+'</pre>', "solution");
+    addmsg("** Execution aborted **", "error");
     queryDone();
 }
 
