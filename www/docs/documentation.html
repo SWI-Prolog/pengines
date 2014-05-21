@@ -101,19 +101,59 @@
                         <div class="page-header">
                             <h1 id="javascript-api">The JavaScript API</h1>
                         </div>
-                        <h4 id="javascript-methods">JavaScript methods</h4>
-                        <p>The Pengines JavaScript API allows a web application developer to create an instance of the Pengine object like so</p>
+                        <p>The Pengines JavaScript API allows a web application developer to create a pengine object like so:</p>
                         <pre>
-var pengine = new Pengine(<em>callbacks</em>);</pre>
-                        <p>providing access to the following methods.</p>
+var pengine = new Pengine(<em>options</em>);</pre>
+                        <p><em>options</em> is a JavaScript object contaning zero or more of</p>
                         <dl>
+                            <dt><code>server:<em>string</em></code></dt>
+                            <dd>A URL pointing to the Pengines server on which to create the pengine. Default is the server from which pengines.js is loaded.</dd>
+                            <dt><code>application:<em>string</em></code></dt>
+                            <dd>The name of the application in which the pengine is to be run. Default is "pengine_sandbox".</dd>
+                            <dt><code>ask:<em>string</em></code></dt>
+                            <dd>The query passed to the pengine immediately after its creation. By default no query is passed.</dd>
+                            <dt><code>template:<em>string</em></code></dt>
+                            <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of template is a copy of the query.</dd>
+                            <dt><code>chunk:<em>integer</em></code></dt>
+                            <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd> 
+                            <dt><code>destroy:<em>boolean</em></code></dt>
+                            <dd>Determines if the pengine is to destroy itself after having run a query to completion. Defaults to <code>true</code>.</dd>
+                            <dt><code>src:<em>string</em></code></dt>
+                            <dd>Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>                            
+                            <dt><code>src_url:<em>string</em></code></dt>
+                            <dd>A URL resolving to a file containing Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>
+                            <dt><code>format:<em>string</em></code></dt>
+                            <dd>Determines the format of event responses. Format is a string, either <code>prolog</code>, <code>json</code> (default), or <code>json-s</code>.</dd>                            
+                            <dt><code>oncreate:<em>function</em></code></dt>
+                            <dd>JavaScript function to be called when a pengine has been created. The expression <code>this.id</code> in the scope of the function points to the id of the pengine.
+                            <dt><code>onsuccess:<em>function</em></code></dt>
+                            <dd>Called when the pengine responds with a successful answer to a query. In the scope of the function the expression <code>this.data</code> points to a <em>list</em> of objects each representing a solution to the query, <code>this.more</code> evaluates to a boolean indicating whether more solutions may exist, and<code>this.id</code> points to the id of the pengine returning the answer.</dd>
+                            <dt><code>onfailure:<em>function</em></code></dt>
+                            <dd>Called when the pengine fails to find a solution. The expression <code>this.id</code> points to the id of the pengine reporting the failure.</dd>
+                            <dt><code>onerror:<em>function</em></code></dt>
+                            <dd>Called when the pengine throws an error. The expression <code>this.data</code> in the scope of the function evaluates to an error message in the form of a string. The expression <code>this.id</code> points to the id of the pengine returning the error.</dd>
+                            <dt><code>onprompt:<em>function</em></code></dt>
+                            <dd>Called when the pengine evaluates the <code>pengine_input/2</code> predicate. The expression <code>this.data</code> in the scope of the function evaluates to a prompt in the form of a string or a JavaScript object. The expression <code>this.id</code> points to the id of the pengine producing the prompt.</dd>
+                            <dt><code>onoutput:<em>function</em></code></dt>
+                            <dd>Called when the pengine has evaluated the built in <code>pengine_output/1</code> predicate. The expression <code>this.data</code> in the scope of the function evaluates to a string or a JavaScript object. The expression <code>this.id</code> points to the id of the pengine generating the output.</dd>
+                            <dt><code>onstop:<em>function</em></code></dt>
+                            <dd>Called when a running query has been successfully stopped. The expression <code>this.id</code> points to the id of the pengine having been stopped.</dd>
+                            <dt><code>onabort:<em>function</em></code></dt>
+                            <dd>Called when a running query has been successfully aborted. The expression <code>this.id</code> points to the id of the pengine having been aborted.</dd>
+                            <dt><code>ondestroy:<em>function</em></code></dt>
+                            <dd>Called when the pengine has been successfully destroyed. The expression <code>this.id</code> points to the id of the pengine having been destroyed.</dd>
+                        </dl>
+                        <p>A pengine object also provides access to the following fields and methods.</p>
+                        <dl>
+                            <dt><code>pengine.id</code></dt>
+                            <dd>Evaluates to the id of the pengine (a string). Note that the pengine must have been created before this field will have a non-null value, i.e. the oncreate handler must have been called.</dd>
                             <dt><code>pengine.ask(<em>query</em>, <em>options</em>)</code></dt>
                             <dd>Runs <em>query</em> in search for the first solution. Throws an error if the query is syntactically or semantically malformed or if running it could compromise the safety of the server. <em>options</em> is a JavaScript object contaning zero or more of<br /><br />
                             <dl>
                                 <dt><code>template: <em>template</em></code></dt>
-                                    <dd><em>template</em> is a string naming a variable (or a term containing variables) shared with the query.</dd>
+                                <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. By default the value of template is a copy of the query.</dd>
                                 <dt><code>chunk: <em>integer</em></code></dt>
-                                    <dd>Retrieve solutions in chunks of <em>integer</em> rather than one by one. 1 means no chunking (default). Other integers indicate the maximum number of solutions to retrieve in one chunk.</dd>                                
+                                <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd>                                
                             </dl>
                             </dd>    
                             <dt><code>pengine.next()</code></dt>
@@ -127,46 +167,6 @@ var pengine = new Pengine(<em>callbacks</em>);</pre>
                             <dt><code>pengine.destroy()</code></dt>
                             <dd>Destroys the pengine.</dd>
                         </dl>
-                        <h4 id="javascript-callbacks">JavaScript callbacks</h4>
-                        <p>Here is a list of callbacks that may be defined when creating the Pengines object:</p>
-                        <dl>
-                            <dt><code>oncreate:<em>function</em></code></dt>
-                            <dd>Called when a pengine has been created. The expression <code>this.data</code> in the scope of the function points to an object </dd>
-                            <dt><code>onsuccess:<em>function</em></code></dt>
-                            <dd>Called when the pengine responds with an answer to a query and provides access to variable bindings (if any). The expression <code>this.data</code> in the scope of the function points to a <em>list</em> of objects of the form {<Var>:<Value>, ...}. </dd>
-                            <dt><code>onfailure:<em>function</em></code></dt>
-                            <dd>Called when the pengine fails to find a solution.</dd>
-                            <dt><code>onerror:<em>function</em></code></dt>
-                            <dd>Called when the pengine throws an error.</dd>
-                            <dt><code>onprompt:<em>function</em></code></dt>
-                            <dd>Called when the pengine evaluates the <code>pengine_input/2</code> predicate.</dd>
-                            <dt><code>onoutput:<em>function</em></code></dt>
-                            <dd>Called when the pengine has evaluated the built in <code>pengine_output/1</code> predicate.</dd>
-                            <dt><code>onstop:<em>function</em></code></dt>
-                            <dd>Called when a running query has been successfull stopped.</dd>
-                            <dt><code>onabort:<em>function</em></code></dt>
-                            <dd>Called when a running query has been successfull aborted.</dd>
-                            <dt><code>ondestroy:<em>function</em></code></dt>
-                            <dd>Called when the pengine has been successfully destroyed.</dd>
-                        </dl>
-                        <h4 id="javascript-objects">JavaScript response objects</h4>
-                        <p>The identifier <code>this</code> in the scope of the callback functions holds the object corresponding to the JSON response from the server, i.e. any of these:</p>
-                        <pre>{event:&quot;create&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;} 
-{event:&quot;success&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;, more:&lt;bool&gt;}
-{event:&quot;failure&quot;, id:&lt;ID&gt;}
-{event:&quot;output&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;} 
-{event:&quot;prompt&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;}
-{event:&quot;error&quot;, id:&lt;ID&gt;, data:&lt;Data&gt;}
-{event:&quot;stop&quot;, id:&lt;ID&gt;}
-{event:&quot;abort&quot;, id:&lt;ID&gt;}
-{event:&quot;destroy&quot;, id:&lt;ID&gt;}</pre>
-                        <p>For example, the object corresponding to the second solution to <code>append(Xs, Ys, [a,b,c])</code> is:</p>
-                        <pre>
-{ event:"success",
-  id:1234,
-  data:[{Xs:["a"], Ys:["b","c"]}],
-  more: true,
-}</pre>
 
                     </div>
                     
