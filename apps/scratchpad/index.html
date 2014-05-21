@@ -177,11 +177,10 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">×</button>
-                            <h4 id="myModalLabel">About <span style="color:darkblue">Pengines Scratchpad</span><span class="pull-right">Version 0.8&nbsp;&nbsp;</span></h4>
+                            <h4 id="myModalLabel">About <span style="color:darkblue">Pengines Scratchpad</span><span class="pull-right">Version 0.9&nbsp;&nbsp;</span></h4>
                         </div>
                         <div class="modal-body">
-                            <p><span style="color:darkblue">Pengines Scratchpad</span> is part of the Pengines platform.
-                            </p>
+                            <p><span style="color:darkblue">Pengines Scratchpad</span> is part of the Pengines platform.</p>
                         </div>
                     </div>
                 </div>
@@ -200,8 +199,6 @@
                                 <li><a class="stophash"  href="#time_limit">Time limit</a></li>
                                 <li><a class="stophash"  href="#known_issues">Known issues</a></li>
                                 <li><a class="stophash"  href="#technology">Technology</a></li>
-                                <li><a class="stophash"  href="#tutorial">Tutorial</a></li>
-                                <li><a class="stophash"  href="#license">License</a></li>
                                 <li><a class="stophash"  href="#source_code">Source code</a></li>
                             </ul>
                             <h4 id="motivation">Motivation</h4>
@@ -210,30 +207,22 @@
                             </p>
                             <h4 id="time_limit">Time limit</h4>
                             <p>
-                                Prolog goals will be allowed to execute on the server for 15 seconds before aborting and returning with a message stating that the time limit has been exceeded. The plan is to increase this limit in the future.
+                                Prolog goals will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded. 
                             </p>
                             <h4 id="known_issues">Known issues</h4>
                             <p>
                             <ul>
-                                <li><span style="color:darkblue">Pengines Scratchpad</span> works fine in Safari, Firefox and Chrome. I have not tested it in Internet Explorer, so I don't know if it works there.
+                                <li><span style="color:darkblue">Pengines Scratchpad</span> works fine in Safari, Firefox and Chrome. It seems there are some problems with Internet Explorer.
                                 </li>
                             </ul>
                             </p>
                             <h4 id="technology">Technology</h4>
                             <p>
-                                <span style="color:darkblue">Pengines Scratchpad</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side. To me that looks like the cleanest interface between a server and a client one can hope to get on the web.
-                            </p>
-                            <h4 id="license">License</h4>
-                            <p>
-                                <span style="color:darkblue">Pengines Scratchpad</span> may only be distributed using the GNU General Public License. See <a target="_blank" href="http://www.swi-prolog.org/license.html">here</a> for details on SWI-Prolog licensing policies supporting both free and non-free software.
-                            </p>
-                            <h4 id="tutorial">Tutorial</h4>
-                            <p>
-                                A tutorial dealing with the Pengines JavaScript API can be found <a target="_blank" href="/tutorial">here</a> (opens in a new tab or window).
+                                <span style="color:darkblue">Pengines Scratchpad</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side.
                             </p>
                             <h4 id="source_code">Source code</h4>
                             <p>
-                                The source code for <span style="color:darkblue">Pengines Scratchpad</span> is available in the Pengines distribution on <a target="_blank" href="https://github.com/spyderbrain/pengine">GitHub</a>.
+                                The source code for <span style="color:darkblue">Pengines Scratchpad</span> is available in the Pengines distribution on <a target="_blank" href="https://github.com/SWI-Prolog/pengines">GitHub</a>.
                             </p>
                         </div>
                     </div>
