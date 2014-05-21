@@ -104,8 +104,8 @@
                             <li>
                                 <a href="#pengine_administrator">The Pengines Administrator</a>
                                 <ul class="nav">
-                                    <li><a href="#app_settings">App settings</a></li>
                                     <li><a href="#server_settings">Server settings</a></li>
+                                    <li><a href="#app_settings">Application settings</a></li>
                                     <li><a href="#statistics">Statistics</a></li>
                                     <li><a href="#account">Account</a></li>
                                 </ul>
@@ -119,26 +119,26 @@
                             <h1 id="download-and-installation">How to download and install</h1>
                         </div>
                         <p>First, ask yourself whether you really <em>need</em> to download and install the Pengines platform at this time. The platform is designed to allow online interaction with Prolog running in the cloud, and if you just want to check it out, you can probably do so without downloading and installing your own instance of the Pengines server. Indeed, you can skip this entire page and quickly move on to the fun parts, the <a href="/apps/scratchpad/index.html">Scratchpad</a> and the <a href="/apps/swish/index.html">SWISH</a> applications. The only area that you will not have access to is the password protected <a href="#pengine_administrator">Pengines Administrator</a>.</p>
-                        <p>If on the other hand you want to develop a serious application on top of the Pengines platform, you will need access to the apps directory and the Administrator pages, and thus need to download and install the whole distribution. Allowing access to the Pengines server from <code>localhost</code> only is of course safe, but if you consider opening up to the rest of the world, please consider the following safety information:</p>
+                        <p>If on the other hand you want to develop a serious application on top of the Pengines platform, you will need access to the apps directory and the Administrator pages, and thus need to download and install the whole distribution. Allowing access to the Pengines server from <code>localhost</code> only is of course safe, but if you are thinking about opening up to the rest of the world, please consider the following safety information:</p>
                         <div class="bs-callout bs-callout-danger">
                             <p>We cannot at this time guarantee the safety of the Pengines platform. We <em>think</em> it is safe, but only if you know what you are doing. You run it at your own risk!</p>
                         </div>
                         <h3 id="downloading">Download Pengines</h3>
                         <p>Download the latest full source code.</p>
-                        <p><a class="btn btn-lg btn-primary" href="https://github.com/spyderbrain/pengine/archive/master.zip">Download latest Pengines</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="https://github.com/SWI-Prolog/pengines/archive/master.zip">Download latest Pengines</a></p>
                         <h3 id="download-additional">Clone or fork Pengines</h3>
                         <div class="bs-docs-dl-options">
                             <p>Clone the entire project or fork your own version of Pengines to make it your own by visiting us on GitHub.</p>
-                            <p><a class="btn btn-lg btn-primary" href="https://github.com/spyderbrain/pengine">Clone or fork via GitHub</a>
+                            <p><a class="btn btn-lg btn-primary" href="https://github.com/SWI-Prolog/pengines">Clone or fork via GitHub</a>
                         </div>
                         <h3 id="installing">Install Pengines</h3>
-                        <p>Basic installation merely requires installing a recent version of
+                        <p>Basic installation merely requires installing a recent version (>= 7.1.5) of
 <a href="http://www.swi-prolog.org" target="_blank">SWI-Prolog</a> and unpacking the Pengines platform
 below.</p>
                         <p>Start <code>run.pl</code> as <code>./run.pl</code> on Unix or double-click <code>run.pl</code>
 on Windows and direct your browser to the indicated address (default
-is <a href="http://localhost:5003/">http://localhost:5003/</a>). You will be asked to enter a user name and a
-password, and if this is the first time you use Pengines you should use "admin" for both. You will end up on the Apps settings page.</p>
+is <a href="http://localhost:3030/">http://localhost:3030/</a>). You will be asked to enter a user name and a
+password, and if this is the first time you use Pengines you should use "admin" for both. You will end up on the Application settings page.</p>
                         <div class="bs-callout bs-callout-danger">
                             <p>You most likely want to 
 change the admin password right away. Clicking the Account link will get you 
@@ -151,17 +151,16 @@ to a page that will allow you to do just that.</p>
                             <h1 id="pengine_administrator">The Pengines Administrator</h1>
                         </div>
                         <p>The Pengines Administrator is a password protected area that allows the owner of a Pengines server instance to change the settings of applications as well as of the server itself. It also features a statistics page where statistics of the workings of the systems is presented as well as an account page where the admin password can be changed.</p>
-                        <h3 id="app_settings">App settings</h3>
-                        <p>The Pengines Administrator's App settings page is where applications can be individually activated and deactivated at will. It furthermore has an important role concerning the safety of the system as a whole since this is where you get an indication of safety issues related to the predicates introduced by new applications, predicates exported by the index.pl file in the apps directory. Here is a screen dum depicting the App settings page:</p>
-                        <img src="manual_files/app_settings.jpg" alt="..." class="img-rounded">
+
                         <h3 id="server_settings">Server settings</h3>
-                        <p>The Pengines Administrator's server settings page gives an overview of various settings related to the operation of the server. This is where you set the varoious timeouts related to the system. It is also where you decide if your application should allow <em>Cross-origin resource sharing</em> (CORS). Here is a picture of the Server settings page:</p>                       
+                        <p>The Pengines Administrator's server settings page gives an overview of various settings related to the operation of the server. This is where you set the various timeouts related to the system. It is also where you decide if your application should allow <em>Cross-origin resource sharing</em> (CORS). Here is a picture of the Server settings page:</p>                       
                         <img src="manual_files/server_settings.jpg" alt="..." class="img-rounded">
-                       
+                        <h3 id="app_settings">Application settings</h3>
+                        <p>The Pengines Administrator's application settings page is where the settings for pengines run by individual applications can be inspected and changed. Here is a screen dump depicting the application settings page:</p>
+                        <img src="manual_files/app_settings.jpg" alt="..." class="img-rounded">                       
                         <h3 id="statistics">Statistics</h3>
                         <p>The Pengines Administrator's statistics page gives an overview of various statistics related to the operation of the server. Here is a picture of the Statistics page:</p>
                         <img src="manual_files/statistics.jpg" alt="..." class="img-rounded">
-
                         <h3 id="account">Account</h3>
                         <p>The Pengines Administrator's account page allows you to change the admin password. Here is a picture of the Account page:</p>                        
                         <img src="manual_files/account.jpg" alt="..." class="img-rounded">
