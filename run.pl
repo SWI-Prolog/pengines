@@ -14,3 +14,5 @@
 
 :- pengine_application(swish).
 :- use_module(swish:apps/swish/swish).
+
+:- server(3030).
