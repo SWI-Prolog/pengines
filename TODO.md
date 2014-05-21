@@ -2,7 +2,7 @@
 
 * Prolog Shell
   - Resize: allow changing widths of sub-windows.
-  - Separate answer blocks (query-enter/answer inside output window?)
+  - Separate answer blocks (query-enter/answer inside output window?)       [OK]
   - New examples show up only after reload
   - Complete rebound I/O (also in examples).
   - Clearer feedback that we are waiting for input
@@ -38,7 +38,7 @@
   - Wordnet application and demos.
 
 * Admin
-  - Remove irrelevant settings (e.g., listing).
+  - Remove irrelevant settings (e.g., listing).                            [OK]
 
 # Editor
 
