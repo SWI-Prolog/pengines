@@ -37,7 +37,7 @@ function first() {
         onerror: handleError,
         onabort: handleAbort,
         format: 'json-s',
-	application: "swish",
+        application: "swish",
         src: program
     });
 }
@@ -47,10 +47,10 @@ function ask() {
     query = query.replace(/^\?-/, '');
     query = query.trim();
     if (query) {
-	addmsg(renderQuery("?- " + query  + "."), "goal");
-	updateHistory(query);
-	disableButtons(true, true, true, false);
-	env.prolog.ask(query);
+	    addmsg(renderQuery("?- " + query  + "."), "goal");
+	    updateHistory(query);
+	    disableButtons(true, true, true, false);
+	    env.prolog.ask(query);
     }
 }
 
@@ -81,7 +81,7 @@ function read() {
         reader.val("");
         reader.prop("disabled", true);
         reader.css("background-color", "white");
-	reader.prop("placeholder", "");
+	    reader.prop("placeholder", "");
         disableButtons(false, true, true, true);
     }
 }
