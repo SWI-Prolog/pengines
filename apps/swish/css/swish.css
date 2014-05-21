@@ -62,6 +62,13 @@ button.ace_replacebtn {
     font-size: 12px;    
 }
 
+
+.alert-warning {
+    background-color: white;
+    margin-bottom: 4px;
+}
+
+
 #controls {
     position: absolute;
     bottom: 50px;

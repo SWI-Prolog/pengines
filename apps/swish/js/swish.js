@@ -93,7 +93,7 @@ function handleCreate() {
 }
 
 function queryDone() {
-    addmsg('<hr class="done"/>', "done");
+    newQuery = true;
     disableButtons(false, true, true, true);
 }
 
@@ -173,10 +173,19 @@ function setGoal(Query) {
 
 
 
+
+
 // Presentation
 
+
+var newQuery = true;
+
 function addmsg(msg, style) {
-    $("#presentation").append("<span class='" + theme() + " " + style + "'>" + msg + "</span>");
+    if (newQuery) {
+        $("#presentation").append('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>');
+        newQuery = false
+    }
+    $("#presentation .alert:last-child").append("<span class='" + theme() + " " + style + "'>" + msg + "</span>");
     $("#results").scrollTop($("#results").prop('scrollHeight'));
 }
 
