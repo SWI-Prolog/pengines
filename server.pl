@@ -33,7 +33,7 @@ user:file_search_path(apps, app(apps)).
 
 :- http_handler(root(tutorial), http_reply_file('www/tutorial.html', []), [prefix]).
 :- http_handler(root(admin/server), http_reply_file('www/admin/server.html', []), [prefix, authentication(basic(passwd, admin))]).
-:- http_handler(root(admin/statistics), http_reply_file('www/admin/statistics.html', []), [prefix, authentication(basic(passwd, admin))]).
+:- http_handler(root(admin/statistics), http_reply_file('www/admin/statistics.html', []), [prefix]).
 :- http_handler(root(admin/account), http_reply_file('www/admin/account.html', []), [prefix, authentication(basic(passwd, admin))]).
 
 
