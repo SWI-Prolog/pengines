@@ -4,10 +4,10 @@
   - Resize: allow changing widths of sub-windows.
   - Separate answer blocks (query-enter/answer inside output window?)       [OK]
   - New examples show up only after reload
-  - Complete rebound I/O (also in examples).
+  - Complete rebound I/O (also in examples).				    [OK]
   - Clearer feedback that we are waiting for input
-  - Make messages work.
-  - Make time/1 work.
+  - Make messages work.							    [OK]
+  - Make time/1 work.							    [OK]
 
   - Redesign:
     - Modularize into
@@ -30,7 +30,7 @@
 
 * Scratchpad:
   - Make clearer that `Scratchpad` is a link back home.
-    - Have pengine icon in the top-left
+    - Have pengine icon in the top-left					   [OK]
   - Show current example
   - Make it clearer that you can make your own changes and version
   - Examples
