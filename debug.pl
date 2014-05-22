@@ -4,5 +4,5 @@
 
 :- load_files(run, [silent(true)]).
 
-:- prolog_ide(thread_monitor).
-:- server(3030).
+:- initialization prolog_ide(thread_monitor).
+:- initialization server(3030).
