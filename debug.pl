@@ -5,3 +5,4 @@
 :- load_files(run, [silent(true)]).
 
 :- prolog_ide(thread_monitor).
+:- server(3030).

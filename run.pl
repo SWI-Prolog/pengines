@@ -16,5 +16,3 @@
 :- use_module(swish:library(pengines_io)).
 swish:(goal_expansion(In,Out) :-
 	pengine_io_goal_expansion(In, Out)).
-
-:- server(3030).
