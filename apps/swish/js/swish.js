@@ -110,16 +110,22 @@ function handleSuccess() {
 		disableButtons(true, false, false, true);
 	} else {
 		addmsg(html + ".<br />", "solution");
+		$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
 		queryDone();
 	}
 }
+
 function handleFailure() {
     addmsg("false.<br />", "solution false")
+	$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
     queryDone();
 }
+
 function handleStop() {
+	$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
     queryDone();
 }
+
 function handlePrompt() {
     var reader = $("#reader");
     reader.prop("disabled", false);
@@ -128,19 +134,23 @@ function handlePrompt() {
     $("#reader").css('background-color', 'rgb(252, 248, 227)');
     disableButtons(true, true, true, false);
 }
+
 function handleOutput() {
 	var data = this.data.trim();
 	addmsg(data, "output");
 }
+
 function handleError() {
     addmsg(this.data, "error");
-    queryDone();
-}
-function handleAbort() {
-    addmsg("** Execution aborted **", "error");
+    $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
     queryDone();
 }
 
+function handleAbort() {
+    addmsg("** Execution aborted **", "error");
+    $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
+    queryDone();
+}
 
 
 // Getting and setting program and goal
