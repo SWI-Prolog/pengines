@@ -147,7 +147,7 @@ function handleError() {
 }
 
 function handleAbort() {
-    addmsg("** Execution aborted **", "error");
+    addmsg("<br />** Execution aborted **", "error");
     $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
     queryDone();
 }
