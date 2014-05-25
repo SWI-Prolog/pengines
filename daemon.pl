@@ -47,4 +47,4 @@ memlimit :-
 :- initialization load_settings('pengines.conf').
 :- initialization http_daemon.
 
-:- [run].
+:- [load].
