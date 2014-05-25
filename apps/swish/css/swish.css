@@ -19,7 +19,7 @@ button.ace_replacebtn {
 
 
 
-#editor { 
+#editor {
     margin: 0;
     position: absolute;
     top: 50px;
@@ -59,7 +59,7 @@ button.ace_replacebtn {
 	padding: 0.3em;
     word-wrap: break-word;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-    font-size: 12px;    
+    font-size: 12px;
 }
 
 
@@ -78,7 +78,7 @@ button.ace_replacebtn {
     padding: 18px;
     border-top: 1px solid gray;
     background-color: #f5f5f5;
-    
+
 }
 
 
