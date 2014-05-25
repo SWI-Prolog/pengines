@@ -145,3 +145,7 @@ code {
 .error {
 	color: #B20000;
 }
+
+span.where-binding {
+	margin-left: 2em;
+}
