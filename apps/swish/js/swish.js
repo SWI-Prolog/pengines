@@ -36,7 +36,7 @@ function first() {
         onoutput: handleOutput,
         onerror: handleError,
         onabort: handleAbort,
-        format: 'json-s',
+        format: 'json-html',
         application: "swish",
         src: program
     });
@@ -99,9 +99,10 @@ function queryDone() {
 
 function handleSuccess() {
     var html;
-	var bindings = this.data[0];
-	if (!jQuery.isEmptyObject(bindings)) {
-	    html = renderBindings(bindings)
+	var answer = this.data[0];
+	if ( answer.variables.length > 0 ||
+	     answer.residuals ) {
+	    html = renderAnswer(answer)
 	} else {
 	    html = "<span class='true'>true</span>";
 	}
@@ -221,16 +222,43 @@ function renderQuery(query) {
 	return highlight(query) + "<br />";
 }
 
-function renderBindings(bindings) {
+/* Bindings of json-html an object with `variables` and optionally
+   `residuals`
+*/
+
+function renderAnswer(answer) {
     var html = "";
-    for (var i in bindings) {
-       if (typeof bindings[i] == "object") {
-           html += highlight(i + ' = [' + bindings[i] + ']') + ",<br />";;
-       } else {
-           html += highlight(i + ' = ' + bindings[i]) + ",<br />";;
+
+    var bindings = answer.variables;
+    for (var i=0; i<bindings.length; i++) {
+       var vars = bindings[i].variables;
+
+       for (var v=0; v<vars.length; v++) {
+	   html += "<span class='pl-var'>"+vars[i]+"</span> = ";
        }
+       html += bindings[i].value;
+       if ( bindings[i].substitutions ) {
+	   var substs = bindings[i].substitutions;
+	   html += ', <span class="pl-comment">% where</span><br/>';
+	   for(var s=0; s<substs.length; s++) {
+	       html += '<span class="where-binding">';
+	       html += "<span class='pl-var'>"+substs[s].var+"</span> = ";
+	       html += substs[s].value;
+	       html += '</span>';
+	       if ( s < substs.length-1 )
+		 html += ",<br/>";
+	   }
+       }
+       if ( i < bindings.length-1 || answer.residuals )
+	   html += ",<br/>";
     }
-    html = html.replace(/,<br \/>$/, "");
+    if ( (residuals = answer.residuals) ) {
+        for(var i=0; i<residuals.length; i++) {
+	    html += residuals[i];
+	    if ( i < residuals.length-1 )
+	        html += ",<br/>";
+	}
+    }
     return html;
 }
 
