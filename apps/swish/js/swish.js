@@ -234,7 +234,7 @@ function renderAnswer(answer) {
        var vars = bindings[i].variables;
 
        for (var v=0; v<vars.length; v++) {
-	   html += "<span class='pl-var'>"+vars[i]+"</span> = ";
+	   html += "<span class='pl-var'>"+vars[v]+"</span> = ";
        }
        html += bindings[i].value;
        if ( bindings[i].substitutions ) {
