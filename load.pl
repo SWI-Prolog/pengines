@@ -16,3 +16,7 @@
 :- use_module(swish:library(pengines_io)).
 swish:(goal_expansion(In,Out) :-
 	pengine_io_goal_expansion(In, Out)).
+% Libraries that are nice to have in SWISH, but cannot be loaded
+% because they use directives that are considered unsafe.  We load
+% them here, so they only need to be imported, which is just fine.
+:- use_module(library(clpfd), []).
