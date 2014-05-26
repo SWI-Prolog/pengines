@@ -36,6 +36,7 @@ function first() {
         onoutput: handleOutput,
         onerror: handleError,
         onabort: handleAbort,
+	destroy: false,
         format: 'json-html',
         application: "swish",
         src: program
@@ -95,6 +96,9 @@ function handleCreate() {
 function queryDone() {
     newQuery = true;
     disableButtons(false, true, true, true);
+    if ( !env.prolog.options.destroy ) {
+        env.prolog.destroy();
+    }
 }
 
 function handleSuccess() {
