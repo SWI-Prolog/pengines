@@ -9,6 +9,7 @@ env.editor = ace.edit("editor");
 env.editor.setTheme("ace/theme/spyder");
 env.editor.getSession().setMode("ace/mode/prolog");
 env.editor.setHighlightActiveLine(false);
+env.editor.setDisplayIndentGuides(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
 env.editor.renderer.setVScrollBarAlwaysVisible(true);
@@ -47,7 +48,7 @@ function first() {
         onoutput: handleOutput,
         onerror: handleError,
         onabort: handleAbort,
-	destroy: false,
+        destroy: false,
         format: 'json-html',
         application: "swish",
         src: program
