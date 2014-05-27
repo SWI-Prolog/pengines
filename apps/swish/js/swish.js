@@ -156,8 +156,25 @@ function handleOutput() {
 	addmsg(data, "output");
 }
 
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
+
 function handleError() {
-    addmsg(this.data, "error");
+    var msg = String(this.data).replace(new RegExp("'"+env.prolog.id+"':", 'g'), "");
+
+    addmsg("<pre class='msg-error'>"+escapeHtml(msg)+"</pre>", "error");
     $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
     queryDone();
 }
