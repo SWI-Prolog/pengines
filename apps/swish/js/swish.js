@@ -224,7 +224,7 @@ function setGoal(Query) {
 var newQuery = true;
 
 function addmsg(msg, style) {
-    if (newQuery) {
+    if (newQuery || $("#presentation").is(':empty') ) {
         $("#presentation").append('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>');
         newQuery = false
     }
