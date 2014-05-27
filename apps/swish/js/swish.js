@@ -72,7 +72,7 @@ function more() {
 }
 
 function stop() {
-    addmsg(".<br />", "solution");
+    addmsg(" .<br />", "solution");
     env.prolog.stop();
 }
 
