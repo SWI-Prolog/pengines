@@ -11,6 +11,8 @@ env.editor.getSession().setMode("ace/mode/prolog");
 env.editor.setHighlightActiveLine(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
+env.editor.renderer.setVScrollBarAlwaysVisible(true);
+
 
 env.cmdline = ace.edit("cmdlineeditor");
 env.cmdline.setTheme("ace/theme/spyder");
@@ -20,7 +22,16 @@ env.cmdline.renderer.setShowPrintMargin(false);
 env.cmdline.renderer.setShowGutter(false);
 env.cmdline.getSession().setUseWrapMode(true);
 env.cmdline.session.setWrapLimitRange(null, null);
-
+env.cmdline.commands.addCommand({
+    bindKey: 'Return',
+    exec: function(editor) {
+        var val = editor.getValue();
+        val = val.trim();
+        if (val.charAt(val.length-1) === ".") {
+            ask();
+        }
+    }
+});
 
 // Calling Prolog
 
@@ -44,7 +55,7 @@ function first() {
 }
 
 function ask() {
-    var query = getGoal()
+    var query = getGoal();
     query = query.replace(/^\?-/, '');
     query = query.trim();
     if (query) {
@@ -266,11 +277,12 @@ function renderAnswer(answer) {
     return html;
 }
 
-function disableButtons(ask, more, stop, abort) {
-    $("#first-btn").prop("disabled", ask);
-    $("#more-btn").prop("disabled", more);
+function disableButtons(first, next, stop, abort) {
+    $("#first-btn").prop("disabled", first);
+    $("#more-btn").prop("disabled", next);
     $("#stop-btn").prop("disabled", stop);
     $("#abort-btn").prop("disabled", abort);
+    if (!next) $("#more-btn").focus();
 }
 
 
@@ -496,7 +508,7 @@ $("#file-menu").on("click", "a#collaborate", function(evt) {
 
 $("#file-menu").on("click", "a#new", function(evt) {
 	evt.preventDefault();
-	setProgram("% Your program goes here\n\n\n/** Examples\n\n*/\n");
+	setProgram("% Your program goes here\n\n\n\n/** Examples\n\n\n*/\n");
 });
 
 $("#file-menu").on("click", "a#print", function(evt) {
