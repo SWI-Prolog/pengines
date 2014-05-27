@@ -28,7 +28,7 @@ env.cmdline.commands.addCommand({
         var val = editor.getValue();
         val = val.trim();
         if (val.charAt(val.length-1) === ".") {
-            ask();
+            first();
         }
     }
 });
