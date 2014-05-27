@@ -29,7 +29,7 @@ env.cmdline.commands.addCommand({
         var val = editor.getValue();
         val = val.trim();
         if (val.charAt(val.length-1) === ".") {
-            ask();
+            first();
         }
     }
 });
@@ -73,7 +73,7 @@ function more() {
 }
 
 function stop() {
-    addmsg(".<br />", "solution");
+    addmsg(" .<br />", "solution");
     env.prolog.stop();
 }
 
@@ -157,8 +157,25 @@ function handleOutput() {
 	addmsg(data, "output");
 }
 
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
+
 function handleError() {
-    addmsg(this.data, "error");
+    var msg = String(this.data).replace(new RegExp("'"+env.prolog.id+"':", 'g'), "");
+
+    addmsg("<pre class='msg-error'>"+escapeHtml(msg)+"</pre>", "error");
     $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
     queryDone();
 }
@@ -208,7 +225,7 @@ function setGoal(Query) {
 var newQuery = true;
 
 function addmsg(msg, style) {
-    if (newQuery) {
+    if (newQuery || $("#presentation").is(':empty') ) {
         $("#presentation").append('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>');
         newQuery = false
     }
