@@ -1,5 +1,7 @@
 :- use_module(library(clpfd)).
 
+% Example by Markus Triska, taken from the SWI-Prolog manual.
+
 sudoku(Rows) :-
         length(Rows, 9), maplist(length_(9), Rows),
         append(Rows, Vs), Vs ins 1..9,
@@ -29,5 +31,5 @@ problem(1, [[_,_,_,_,_,_,_,_,_],
 
 /** Examples
 
-problem(1, Rows), time(sudoku(Rows)).
+problem(1, Rows), time(sudoku(Rows)), maplist(writeln, Rows).
 */
