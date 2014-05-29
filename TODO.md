@@ -1,7 +1,7 @@
 # Pengine demo site
 
 * Prolog Shell
-  - Resize: allow changing widths of sub-windows.
+  - Resize: allow changing widths of sub-windows.                           [OK]
   - Separate answer blocks (query-enter/answer inside output window?)       [OK]
   - New examples show up only after reload
   - Complete rebound I/O (also in examples).				    [OK]
