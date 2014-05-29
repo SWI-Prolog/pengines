@@ -113,20 +113,14 @@ legend {
     width: 120px;
 }
 
+#slider {
+    margin:18px 0 0 18px;
+    width:80px;
+
 
 
 code {
 	font-size: 85%;
-}
-
-#save-btn,
-#update-btn,
-#share-btn {
-    margin: 8px 4px;
-}
-
-#save-btn {
-    margin-left: 18px;
 }
 
 

@@ -413,7 +413,6 @@ function updateProgram() {
     var program = encodeURIComponent(getProgram());
     if (program) {
          $.post("/storage/update", "file=" + file + "&program=" + program, function() {
-			$('#update-btn').prop('disabled', true);
             env.dirty = false;
         });
     }
@@ -521,7 +520,11 @@ $("#file-menu").on("click", "a#save", function(evt) {
 
 $("#file-menu").on("click", "a#share", function(evt) {
 	evt.preventDefault();
-    updateProgram();
+	if (window.location.hash == "") {
+	    saveProgram();
+	} else {
+	    updateProgram();
+	}
     $('#share-dialog').modal();
 });
 
@@ -641,6 +644,25 @@ $("#line-numbering-checkbox").on("change", function() {
 	}
 });
 
+$("#slider").on("input", function() {
+    var val = this.value;
+    $("#editor").css("width", val+"%");
+    $("#console").css("width", (100-val)+"%");
+    if (val > 69) {
+        $("#console").css("display","none");
+        $("#editor").css("width", "100%");
+    } else {
+        $("#console").css("display","block");
+    }
+    if (val < 31) {
+        $("#editor").css("display","none");
+        $("#console").css("width", "100%");
+    } else {
+        $("#editor").css("display","block");
+    }
+});
+
+
 
 // Event handlers: Console
 
@@ -676,23 +698,7 @@ function parseBoolean(value) {
 	return value == "true" ? true : false;
 }
 
-$("#slider").on("input", function() {
-    var val = this.value;
-    $("#editor").css("width", val+"%");
-    $("#console").css("width", (100-val)+"%");
-    if (val > 69) {
-        $("#console").css("display","none");
-        $("#editor").css("width", "100%");
-    } else {
-        $("#console").css("display","block");
-    }
-    if (val < 11) {
-        $("#editor").css("display","none");
-        $("#console").css("width", "100%");
-    } else {
-        $("#editor").css("display","block");
-    }
-});
+
 
 
 
