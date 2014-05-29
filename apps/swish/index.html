@@ -30,6 +30,10 @@
                             <ul id="file-menu" class="dropdown-menu">
                                 <li><a id="new">New</a></li>
                                 <li class="divider"></li>
+                                <li><a id="save">Save</a></li>
+                                <li class="divider"></li>
+                                <li><a id="share">Share...</a></li>
+                                <li class="divider"></li>
                                 <li><a id="collaborate">Collaborate...</a></li>
                                 <li class="divider"></li>
                                 <li><a id="prefs">Preferences...</a></li>
@@ -77,12 +81,6 @@
                             <input id="slider" style="margin-left:18px;margin-top:18px;width:80px;" type='range' step='1' min='10' max='70' />
                         </li>
                     </ul>
-                    
-<!--
-                    <button id="save-btn" class="btn btn-default pull-left" disabled>Save</button>
-                    <button id="update-btn" class="btn btn-default hide pull-left" disabled>Update</button>
-                    <button id="share-btn" class="btn btn-default hide pull-left">Share</button>
--->
                 </nav>
             </div>
         </header>
@@ -152,7 +150,7 @@
                 </div>
             </div>
         </div>
-        <div id="share" class="modal fade" tabindex="-1">
+        <div id="share-dialog" class="modal fade" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -388,7 +388,6 @@ function loadSrc(url) {
 			}
 			populateExampleMenu();
 			env.dirty = false;
-			$('#save-btn').prop('disabled', true)
 	})
 	.fail(function() {
 		$("#presentation").html('<div class="alert alert-error"> <button type="button" class="close" data-dismiss="alert">&times;</button> Error: ' + url + ' does not exist.</div>');
@@ -404,9 +403,6 @@ function saveProgram() {
             var file = response.file;
             window.location.hash = file;
             $("#url").val(url + "/apps/swish/index.html#" + file);
-            $('#save-btn').addClass("hide");
-            $('#update-btn').removeClass("hide").prop('disabled', true);
-            $('#share-btn').removeClass("hide");
             env.dirty = false;
         });
     }
@@ -500,18 +496,33 @@ function populateHistoryMenu() {
 
 env.editor.getSession().on('change', function() {
 	if (!env.dirty) {
-	env.dirty = true;
-		$('#save-btn').prop('disabled', false);
-		$('#update-btn').prop('disabled', false);
+	    env.dirty = true;
 	}
 });
 
 
 // Event handlers: Menus
 
-$("#example-menu").on("click", "a", function(evt) {
+$("#file-menu").on("click", "a#new", function(evt) {
 	evt.preventDefault();
-	loadSrc(evt.target.href);
+	window.location.hash = "";
+	setProgram("% Your program goes here\n\n\n\n/** Examples\n\n\n*/\n");
+	env.dirty = false;
+});
+
+$("#file-menu").on("click", "a#save", function(evt) {
+	evt.preventDefault();
+	if (window.location.hash == "") {
+	    saveProgram();
+	} else {
+	    updateProgram();
+	}
+});
+
+$("#file-menu").on("click", "a#share", function(evt) {
+	evt.preventDefault();
+    updateProgram();
+    $('#share-dialog').modal();
 });
 
 $("#file-menu").on("click", "a#prefs", function(evt) {
@@ -522,11 +533,6 @@ $("#file-menu").on("click", "a#prefs", function(evt) {
 $("#file-menu").on("click", "a#collaborate", function(evt) {
 	evt.preventDefault();
 	TogetherJS(this);
-});
-
-$("#file-menu").on("click", "a#new", function(evt) {
-	evt.preventDefault();
-	setProgram("% Your program goes here\n\n\n\n/** Examples\n\n\n*/\n");
 });
 
 $("#file-menu").on("click", "a#print", function(evt) {
@@ -564,6 +570,10 @@ $("#edit-menu").on("click", "a#find", function(evt) {
 	env.editor.commands.commands.replace.exec(env.editor, "left")
 });
 
+$("#example-menu").on("click", "a", function(evt) {
+	evt.preventDefault();
+	loadSrc(evt.target.href);
+});
 
 // Event handlers: Prefeences
 
@@ -629,15 +639,6 @@ $("#line-numbering-checkbox").on("change", function() {
 	if (localStorage) {
 		localStorage['swish-line-numbering'] = value;
 	}
-});
-
-$("#save-btn").on("click", saveProgram);
-
-$("#update-btn").on("click", updateProgram);
-
-$("#share-btn").on("click", function() {
-    updateProgram();
-    $('#share').modal();
 });
 
 
