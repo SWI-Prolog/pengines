@@ -73,10 +73,16 @@
                                 <li><a href="#help" data-toggle="modal">Help...</a></li>
                             </ul>
                         </li>
+                        <li>
+                            <input id="slider" style="margin-left:18px;margin-top:18px;width:80px;" type='range' step='1' min='10' max='70' />
+                        </li>
                     </ul>
+                    
+<!--
                     <button id="save-btn" class="btn btn-default pull-left" disabled>Save</button>
                     <button id="update-btn" class="btn btn-default hide pull-left" disabled>Update</button>
                     <button id="share-btn" class="btn btn-default hide pull-left">Share</button>
+-->
                 </nav>
             </div>
         </header>
@@ -244,7 +250,8 @@ jealous(X, Y).
             <pre id="editor"></pre>
             <div id="console">
                 <div id="results">
-                    <div id="presentation"></div>
+                    <div id="presentation">
+                    </div>
                 </div>
                 <div id="controls" onclick="return false">
                     <div>
@@ -286,11 +293,10 @@ jealous(X, Y).
                     </div>
                 </div>
             </div>
-            <div id="documentation"></div>
         </div>
         <header class="navbar navbar-default navbar-fixed-bottom bs-docs-nav">
       <div class="footer">
-        <p class="muted credit">Powered by <a target="_blank" href="http://www.swi-prolog.org/">SWI-Prolog</a> and the <a target="_blank" href="http://www.swi-prolog.org/pldoc/doc_for?object=section%28%27packages/pengines.html%27%29">Pengines package</a>.</p>
+       <p class="muted credit">Powered by <a target="_blank" href="http://www.swi-prolog.org/">SWI-Prolog</a> and the <a target="_blank" href="http://www.swi-prolog.org/pldoc/doc_for?object=section%28%27packages/pengines.html%27%29">Pengines package</a>.</p>
       </div>
         </header>
         <!-- Placed at the end of the document so the pages load faster -->

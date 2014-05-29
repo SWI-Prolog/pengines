@@ -24,7 +24,7 @@ button.ace_replacebtn {
     position: absolute;
     top: 50px;
     bottom: 50px;
-    right: 40%;
+    right: 50%;
     left: 0;
     border-bottom: none;
 
@@ -39,14 +39,21 @@ button.ace_replacebtn {
 #reader {
     width: 100%;
     padding: 3px;
+}	
+		
+#console {
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    right: 0;
+    width: 50%;
 }
 
 #results {
     position: absolute;
-    top: 50px;
-    bottom: 255px;
-    right: 0;
-    width: 40%;
+    top: 0px;
+    bottom: 205px;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     background-image: url("../img/owl_25_years.png");
@@ -57,6 +64,7 @@ button.ace_replacebtn {
 
 #presentation {
 	padding: 0.3em;
+    width: 100%;
     word-wrap: break-word;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
     font-size: 12px;
@@ -72,8 +80,8 @@ button.ace_replacebtn {
 
 #controls {
     position: absolute;
-    bottom: 50px;
-    width: 40%;
+    bottom: 0px;
+    width: 100%;
     right: 0;
     padding: 18px;
     border-top: 1px solid gray;
@@ -82,13 +90,14 @@ button.ace_replacebtn {
 }
 
 
+
 .navbar-fixed-bottom {
     border-top: 2px solid #E5E5E5;
 }
 
 .footer {
     text-align: center;
-    margin: 12px;
+    margin: 12px 0 0 0;
 }
 
 

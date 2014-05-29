@@ -12,7 +12,7 @@ env.editor.setHighlightActiveLine(false);
 env.editor.setDisplayIndentGuides(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
-env.editor.renderer.setVScrollBarAlwaysVisible(true);
+env.editor.renderer.setVScrollBarAlwaysVisible(false);
 
 
 env.cmdline = ace.edit("cmdlineeditor");
@@ -674,6 +674,26 @@ $("#reader").on("blur", function(evt) {
 function parseBoolean(value) {
 	return value == "true" ? true : false;
 }
+
+$("#slider").on("input", function() {
+    var val = this.value;
+    $("#editor").css("width", val+"%");
+    $("#console").css("width", (100-val)+"%");
+    if (val > 69) {
+        $("#console").css("display","none");
+        $("#editor").css("width", "100%");
+    } else {
+        $("#console").css("display","block");
+    }
+    if (val < 11) {
+        $("#editor").css("display","none");
+        $("#console").css("width", "100%");
+    } else {
+        $("#editor").css("display","block");
+    }
+});
+
+
 
 $(document).ready(function() {
 	if (localStorage && localStorage.length > 0) {
