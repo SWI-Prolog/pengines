@@ -12,7 +12,7 @@ env.editor.setHighlightActiveLine(false);
 env.editor.setDisplayIndentGuides(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
-env.editor.renderer.setVScrollBarAlwaysVisible(false);
+env.editor.renderer.setVScrollBarAlwaysVisible(true);
 
 
 env.cmdline = ace.edit("cmdlineeditor");
