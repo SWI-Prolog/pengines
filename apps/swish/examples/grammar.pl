@@ -33,5 +33,6 @@ p(p(with)) --> [with].
 
 phrase(s(Tree), [john, saw, a, man, with, a, telescope]).
 phrase(s(Tree), Sentence).
+between(1, 8, N), length(S, N), phrase(s(_), S), writeln(S), fail.
 
 */
