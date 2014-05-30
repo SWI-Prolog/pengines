@@ -34,6 +34,7 @@ env.cmdline.commands.addCommand({
     }
 });
 
+
 // Calling Prolog
 
 function first() {
@@ -216,11 +217,7 @@ function setGoal(Query) {
 }
 
 
-
-
-
 // Presentation
-
 
 var newQuery = true;
 
@@ -240,12 +237,6 @@ function highlight(string) {
     return html.join("")
 }
 
-function highlight2(string) {
-    var html = [];
-    var data = env.editor.session.getMode().getTokenizer().getLineTokens(string, "start");
-    env.editor.renderer.$textLayer.$renderSimpleLine(html, data.tokens);
-    return html.join("")
-}
 
 function theme() {
     return env.editor.renderer.theme.cssClass;
