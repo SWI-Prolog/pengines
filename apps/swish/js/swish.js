@@ -185,6 +185,11 @@ function handleAbort() {
     addmsg("<br />** Execution aborted **", "error");
     $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
     queryDone();
+    var reader = $("#reader");
+    reader.val("");
+    reader.prop("disabled", true);
+    reader.css("background-color", "white");
+	reader.prop("placeholder", "");
 }
 
 
@@ -252,7 +257,6 @@ function renderQuery(query) {
 
 function renderAnswer(answer) {
     var html = "";
-
     var bindings = answer.variables;
     for (var i=0; i<bindings.length; i++) {
        var vars = bindings[i].variables;
@@ -480,8 +484,6 @@ function populateHistoryMenu() {
     $("#history").html(html);}
 
 
-
-
 // Event handlers: Editor
 
 env.editor.getSession().on('change', function() {
@@ -569,7 +571,7 @@ $("#example-menu").on("click", "a", function(evt) {
 	loadSrc(evt.target.href);
 });
 
-// Event handlers: Prefeences
+// Event handlers: Preferences
 
 $("#theme-menu").on("change", function() {
 	var value = $("#theme-menu option:selected").val();
@@ -654,7 +656,6 @@ $("#slider").on("input", function() {
 });
 
 
-
 // Event handlers: Console
 
 $("#examples-btn").on("click", function() {
@@ -680,6 +681,7 @@ $("#reader").on("keyup", function(evt) {
 		read();
 	}
 });
+
 $("#reader").on("blur", function(evt) {
 	evt.target.focus();
 	return false;
@@ -690,8 +692,7 @@ function parseBoolean(value) {
 }
 
 
-
-
+// Initialisation
 
 $(document).ready(function() {
 	if (localStorage && localStorage.length > 0) {
