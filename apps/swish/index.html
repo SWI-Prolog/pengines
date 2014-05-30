@@ -5,6 +5,7 @@
         <title>SWISH</title>
         <meta name="description" content="">
         <meta name="author" content="Torbjörn Lager">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- CSS -->
         <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="/apps/swish/css/swish.css">
@@ -196,7 +197,7 @@
                 </ul>
                 <h4 id="motivation">Motivation</h4>
                 <p>
-                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is inspired by web-based tools such as <a target="_blank" href="http://jsfiddle.net/">JSFIDDLE</a> in that it allows you to develop a program and then share it with others on the Web. However, lacking both debugger and profiler, <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is far from a full-fledged IDE for Prolog, and to avoid compromising the server it does not allow you to execute "dangerous" predicates such as predicates reading and writing files. (It does however allow you to use <code>read/1</code> and <code>write/1</code> but they will only read from and write to your web browser.)
+                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is inspired by web-based tools such as <a target="_blank" href="http://jsfiddle.net/">JSFIDDLE</a> in that it allows you to develop a program and then share it with others on the Web. However, lacking both debugger and profiler, <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is far from a full-fledged IDE for Prolog, and to avoid compromising the server it does not allow you to execute "dangerous" predicates such as predicates reading and writing files. (It does however allow you to use predicates such as <code>read/1</code> and <code>write/1</code> but they will only read from and write to your web browser.)
                 </p>
                 <p>
                     <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> might be useful in an educational setting. If you are a teacher, you may want to tell your students to share with you the solutions to exercises by sending you a link to <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> loaded with their solutions ready to run.
@@ -217,7 +218,7 @@ jealous(X, Y).
 */</pre>
                 <h4 id="time_limit">Time limit</h4>
                 <p>
-                    When you click the First button, your goal will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded. The plan is to increase this limit in the future.
+                    When you click the First button, your goal will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded. 
                 </p>
                 <h4 id="known_issues">Known issues</h4>
                 <p>
@@ -229,7 +230,7 @@ jealous(X, Y).
                 </ul>
                 <h4 id="technology">Technology</h4>
                 <p>
-                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://twitter.github.io/bootstrap/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side.
+                    <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> is implemented in a combination of Prolog, HTML, CSS and JavaScript. The only framework used is <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a> and the choice of editor landed on the very capable <a target="_blank" href="http://ace.ajax.org/">ACE editor</a>. The server serves static HTML, CSS and JavaScript code only, none of that is dynamically generated on the server. Instead, to create behaviour, the main traffic between server and client consists of the JSON responses from the server guiding the transformation of the browser's DOM on the client side.
                 </p>
 
                 <h4 id="source_code">Source code</h4>
