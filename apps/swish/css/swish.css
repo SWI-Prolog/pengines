@@ -97,7 +97,7 @@ button.ace_replacebtn {
 
 .footer {
     text-align: center;
-    margin: 12px 0 0 0;
+    margin: 14px;
 }
 
 
@@ -114,8 +114,9 @@ legend {
 }
 
 #slider {
-    margin:18px 0 0 18px;
+    margin-top: 4px;
     width:80px;
+}
 
 
 
