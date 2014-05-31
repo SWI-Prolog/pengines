@@ -31,6 +31,10 @@
                             <ul id="file-menu" class="dropdown-menu">
                                 <li><a id="new">New</a></li>
                                 <li class="divider"></li>
+                                <li><a id="save">Save</a></li>
+                                <li class="divider"></li>
+                                <li><a id="share">Share...</a></li>
+                                <li class="divider"></li>
                                 <li><a id="collaborate">Collaborate...</a></li>
                                 <li class="divider"></li>
                                 <li><a id="prefs">Preferences...</a></li>
@@ -78,9 +82,6 @@
                         </li>
                     </ul>
                     <button id="run-btn" class="btn btn-primary pull-left">Run</button>
-                    <button id="save-btn" class="btn btn-default pull-left" disabled>Save</button>
-                    <button id="update-btn" class="btn btn-default hide pull-left" disabled>Update</button>
-                    <button id="share-btn" class="btn btn-default navbar-btn hide pull-left">Share</button>
                 </nav>
             </div>
         </header>
@@ -157,7 +158,7 @@
                 </div>
             </div>
         </div>
-            <div id="share" class="modal fade" tabindex="-1">
+            <div id="share-dialog" class="modal fade" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">

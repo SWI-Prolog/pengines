@@ -39,7 +39,6 @@ function setProgram(src) {
 	env.editor.setValue(src, -1);
 	env.dirty = false;
 	$('#run-btn').prop('disabled', false);
-	$('#save-btn').prop('disabled', true);
 }
 
 // Printing
@@ -72,6 +71,183 @@ function escapeHtml(string) {
       return entityMap[s];
     });
   }
+
+
+// Handling programs
+
+function maybeLoadSrc() {
+    var file = window.location.hash.slice(1);
+    if (file) {
+        loadSrc("/storage/"+ encodeURIComponent(file));
+    }
+}
+
+function loadSrc(url) {
+    $.get(url)
+    .done(function(program) {
+		setProgram(program);
+	})
+	.fail(function() {
+		alert('Error: ' + url + ' does not exist.');
+	})
+}
+
+function saveProgram() {
+    var program = encodeURIComponent(getProgram());
+    if (program) {
+        $.post("/storage/store", "type=html&program=" + program, function(response) {
+            var url = response.url;
+            var file = response.file;
+            window.location.hash = file;
+            $("#url").val(url + "/apps/scratchpad/index.html#" + file);
+            $('#run-btn').prop('disabled', false);
+            env.dirty = false;
+        });
+    }
+}
+
+function updateProgram() {
+	var file = window.location.hash.slice(1);
+    var program = encodeURIComponent(getProgram());
+    if (program) {
+         $.post("/storage/update", "file=" + file + "&program=" + program, function() {
+            $('#run-btn').prop('disabled', false);
+            env.dirty = false;
+        });
+    }
+}
+
+
+// Event handlers: Editor
+
+env.editor.getSession().on('change', function() {
+	if (!env.dirty) {
+	    env.dirty = true;
+		$('#run-btn').prop('disabled', true);
+	}
+});
+
+
+// Event handlers: Menus
+
+$("#file-menu").on("click", "a#new", function(evt) {
+	evt.preventDefault();
+	setProgram("<html>\n"+
+		   "  <head>\n"+
+		   "    <script src=\"/vendor/jquery/jquery-2.0.3.min.js\"></script>\n"+
+		   "    <script src=\"/pengine/pengines.js\"></script>\n"+
+		   "    <script type=\"text/x-prolog\">\n\n"+
+		   "      % Your Prolog code goes here\n\n"+
+		   "	</script>\n"+
+		   "    <script>\n"+
+		   "      var pengine = new Pengine({\n"+
+		   "        ask: \"member(X,[pippi])\",         // Your goal goes here\n"+
+		   "        template: 'X',                    // The variables you are interested in\n"+
+		   "        onsuccess: handleSuccess,\n"+
+		   "      });\n"+
+		   "	  function handleSuccess() {\n"+
+		   "	    alert(JSON.stringify(this.data)); // handle results\n"+
+		   "	  }\n"+
+		   "    </script>\n"+
+		   "  </head>\n"+
+		   "  <body>\n"+
+		   "  </body>\n"+
+		   "</html>\n");
+});
+
+$("#file-menu").on("click", "a#save", function(evt) {
+	evt.preventDefault();
+	if (window.location.hash == "") {
+	    saveProgram();
+	} else {
+	    updateProgram();
+	}
+});
+
+$("#file-menu").on("click", "a#share", function(evt) {
+	evt.preventDefault();
+	if (window.location.hash == "") {
+	    saveProgram();
+	} else {
+	    updateProgram();
+	}
+    $('#share-dialog').modal();
+});
+
+$("#file-menu").on("click", "a#collaborate", function(evt) {
+	evt.preventDefault();
+	TogetherJS(this);
+});
+
+$("#file-menu").on("click", "a#prefs", function(evt) {
+	evt.preventDefault();
+	$("#preferences").modal({backdrop:false});
+});
+
+$("#file-menu").on("click", "a#print", function(evt) {
+	evt.preventDefault();
+	print_editor_content();
+});
+
+$("#edit-menu").on("click", "a#undo", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.undo.exec(env.editor)
+});
+
+$("#edit-menu").on("click", "a#redo", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.redo.exec(env.editor)
+});
+
+$("#edit-menu").on("click", "a#indent", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.indent.exec(env.editor)
+});
+
+$("#edit-menu").on("click", "a#outdent", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.outdent.exec(env.editor)
+});
+
+$("#edit-menu").on("click", "a#comment", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.toggleBlockComment.exec(env.editor)
+});
+
+$("#edit-menu").on("click", "a#find", function(evt) {
+	evt.preventDefault();
+	env.editor.commands.commands.replace.exec(env.editor, "left")
+});
+
+$("#example-menu").on("click", "a", function(evt) {
+	evt.preventDefault();
+	clearContent();
+	loadSrc(evt.target.href);
+});
+
+
+// Non-menu controls
+
+$("#run-btn").on("click", runProgram);
+
+
+$("#slider").on("input", function() {
+    var val = this.value;
+    $("#editor").css("width", val+"%");
+    $("#console").css("width", (100-val)+"%");
+    if (val > 69) {
+        $("#console").css("display","none");
+        $("#editor").css("width", "100%");
+    } else {
+        $("#console").css("display","block");
+    }
+    if (val < 31) {
+        $("#editor").css("display","none");
+        $("#console").css("width", "100%");
+    } else {
+        $("#editor").css("display","block");
+    }
+});
 
 
 // GUI preferences
@@ -119,146 +295,6 @@ function setShowGutter(bool) {
 	env.editor.renderer.setShowGutter(bool);
 	$("#line-numbering-checkbox").prop('checked', bool);
 }
-
-
-// Handling programs
-
-function maybeLoadSrc() {
-    var file = window.location.hash.slice(1);
-    if (file) {
-        loadSrc("/storage/"+ encodeURIComponent(file));
-    }
-}
-
-function loadSrc(url) {
-    $.get(url)
-    .done(function(program) {
-		setProgram(program);
-	})
-	.fail(function() {
-		alert('Error: ' + url + ' does not exist.');
-	})
-}
-
-function saveProgram() {
-    var program = encodeURIComponent(getProgram());
-    if (program) {
-        $.post("/storage/store", "type=html&program=" + program, function(response) {
-            var url = response.url;
-            var file = response.file;
-            window.location.hash = file;
-            $("#url").val(url + "/apps/scratchpad/index.html#" + file);
-            $('#run-btn').prop('disabled', false);
-            $('#save-btn').addClass("hide");
-            $('#update-btn').removeClass("hide").prop('disabled', true);
-            $('#share-btn').removeClass("hide");
-            env.dirty = false;
-        });
-    }
-}
-
-function updateProgram() {
-	var file = window.location.hash.slice(1);
-    var program = encodeURIComponent(getProgram());
-    if (program) {
-         $.post("/storage/update", "file=" + file + "&program=" + program, function() {
-            $('#run-btn').prop('disabled', false);
-			$('#update-btn').prop('disabled', true);
-            env.dirty = false;
-        });
-    }
-}
-
-
-// Event handlers: Editor
-
-env.editor.getSession().on('change', function() {
-	if (!env.dirty) {
-	    env.dirty = true;
-		$('#run-btn').prop('disabled', true);
-		$('#save-btn').prop('disabled', false);
-		$('#update-btn').prop('disabled', false);
-	}
-});
-
-
-// Event handlers: Menus
-
-$("#example-menu").on("click", "a", function(evt) {
-	evt.preventDefault();
-	clearContent();
-	loadSrc(evt.target.href);
-});
-
-$("#file-menu").on("click", "a#new", function(evt) {
-	evt.preventDefault();
-	setProgram("<html>\n"+
-		   "  <head>\n"+
-		   "    <script src=\"/vendor/jquery/jquery-2.0.3.min.js\"></script>\n"+
-		   "    <script src=\"/pengine/pengines.js\"></script>\n"+
-		   "    <script type=\"text/x-prolog\">\n\n"+
-		   "      % Your Prolog code goes here\n\n"+
-		   "	</script>\n"+
-		   "    <script>\n"+
-		   "      var pengine = new Pengine({\n"+
-		   "        ask: \"member(X,[pippi])\",         // Your goal goes here\n"+
-		   "        template: 'X',                    // The variables you are interested in\n"+
-		   "        onsuccess: handleSuccess,\n"+
-		   "      });\n"+
-		   "	  function handleSuccess() {\n"+
-		   "	    alert(JSON.stringify(this.data)); // handle results\n"+
-		   "	  }\n"+
-		   "    </script>\n"+
-		   "  </head>\n"+
-		   "  <body>\n"+
-		   "  </body>\n"+
-		   "</html>\n");
-});
-
-$("#file-menu").on("click", "a#collaborate", function(evt) {
-	evt.preventDefault();
-	TogetherJS(this);
-});
-
-$("#file-menu").on("click", "a#prefs", function(evt) {
-	evt.preventDefault();
-	$("#preferences").modal({backdrop:false});
-});
-
-$("#file-menu").on("click", "a#print", function(evt) {
-	evt.preventDefault();
-	print_editor_content();
-});
-
-$("#edit-menu").on("click", "a#undo", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.undo.exec(env.editor)
-});
-
-$("#edit-menu").on("click", "a#redo", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.redo.exec(env.editor)
-});
-
-$("#edit-menu").on("click", "a#indent", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.indent.exec(env.editor)
-});
-
-$("#edit-menu").on("click", "a#outdent", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.outdent.exec(env.editor)
-});
-
-$("#edit-menu").on("click", "a#comment", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.toggleBlockComment.exec(env.editor)
-});
-
-$("#edit-menu").on("click", "a#find", function(evt) {
-	evt.preventDefault();
-	env.editor.commands.commands.replace.exec(env.editor, "left")
-});
 
 
 // Event handlers: Preferences
@@ -325,36 +361,6 @@ $("#line-numbering-checkbox").on("change", function() {
 	if (localStorage) {
 		localStorage['scratchpad-line-numbering'] = value;
 	}
-});
-
-$("#slider").on("input", function() {
-    var val = this.value;
-    $("#editor").css("width", val+"%");
-    $("#console").css("width", (100-val)+"%");
-    if (val > 69) {
-        $("#console").css("display","none");
-        $("#editor").css("width", "100%");
-    } else {
-        $("#console").css("display","block");
-    }
-    if (val < 31) {
-        $("#editor").css("display","none");
-        $("#console").css("width", "100%");
-    } else {
-        $("#editor").css("display","block");
-    }
-});
-
-
-$("#run-btn").on("click", runProgram);
-
-$("#save-btn").on("click", saveProgram);
-
-$("#update-btn").on("click", updateProgram);
-
-$("#share-btn").on("click", function() {
-    updateProgram();
-    $('#share').modal()
 });
 
 
