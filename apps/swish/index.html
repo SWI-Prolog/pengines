@@ -76,6 +76,7 @@
                                 <li><a href="#about" data-toggle="modal">About...</a></li>
                                 <li class="divider"></li>
                                 <li><a href="#help" data-toggle="modal">Help...</a></li>
+                                <li><a href="#caveats" data-toggle="modal">Caveats...</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -172,7 +173,7 @@
                         <h4 id="myModalLabel2">About <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span><span class="pull-right">Version 0.9.2&nbsp;&nbsp;</span></h4>
                     </div>
                     <div class="modal-body">
-                        <p><span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> was originally written by Torbjörn Lager as a homage to SWI-Prolog. Since then, Jan Wielemaker has given lots of suggestions, and also done some coding. <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> now serves also as a demo the Pengines platform. You are free to use it as a starting point for your own project. 
+                        <p><span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> was originally written by Torbjörn Lager as a homage to SWI-Prolog. Since then, Jan Wielemaker has given lots of suggestions, and also done some coding. <span style="color:darkblue">SWI</span><span style="color:maroon">SH</span> now serves also as a demo the Pengines platform. You are free to use it as a starting point for your own project.
                         </p>
                     </div>
                 </div>
@@ -218,7 +219,7 @@ jealous(X, Y).
 */</pre>
                 <h4 id="time_limit">Time limit</h4>
                 <p>
-                    When you click the First button, your goal will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded. 
+                    When you click the First button, your goal will be allowed to execute on the server for 300 seconds before aborting and returning with a message stating that the time limit has been exceeded.
                 </p>
                 <h4 id="known_issues">Known issues</h4>
                 <p>
@@ -241,6 +242,63 @@ jealous(X, Y).
         </div>
             </div>
         </div>
+        <div id="caveats" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h2 id="myModalLabel">Limitations of the SWISH shell</h2>
+            </div>
+            <div class="modal-body">
+                <h4>Table of Contents</h4>
+                <ul>
+                    <li><a href="#sandboxing">Sandboxing</a></li>
+                    <li><a href="#io">Input and output</a></li>
+		</ul>
+		<h4 id="sandboxing">Sandboxing</h4>
+<p>
+SWISH cannot provide unrestricted access to Prolog because Prolog gives
+unrestricted access to the operating system.  Therefore, SWISH examines
+each goal on safety before execution.  This process unfolds the call-tree
+and verifies all called predicates against a whitelist.  It fails on three
+occasions:
+</p>
+
+  <ul>
+    <li>If insufficient information is available to decide what
+        will be called.  E.g., <code>?- read(X), call(X).</code>
+	Such errors are raised as <em>instantiation errors</em>.
+    <li>If a predicate is found that is not whitelisted.  Such
+        errors are raised as <em>permission errors</em>
+    <li>If a called predicate is not defined.  Such errors are
+        raised as <em>existence errors</em>
+  </ul>
+
+<p>
+If any of the above happens, the error is printed, along with
+a chain of intermediate goals that should help finding the culprit.
+Note that the whitelist is incomplete, i.e., there are many
+predicates that can be considered safe that are not on the list.
+Please report such omissions as bugs.
+</p>
+		<h4 id="io">Input and output</h4>
+<p>
+Normal read and write do not work in the web environment.  A number
+of normal Prolog predicates are redefined to provide basic I/O.  Other
+I/O predicate are either not whitelisted or send their output to the
+server's console.
+</p>
+
+  <ul>
+    <li>read/1
+    <li>write/1, writeq/1, print/1, write_canonical/1, write_term/2
+    <li>format/1, format/2
+    <li>message_hook/3, redirecting all system messages.
+  </ul>
+	    </div>
+	</div>
+	</div>
+	</div>
         <!-- Begin page content -->
         <div class="container">
             <pre id="editor"></pre>
@@ -293,9 +351,9 @@ jealous(X, Y).
         <header class="navbar navbar-default navbar-fixed-bottom bs-docs-nav">
             <div class="footer">
                 <p class="muted credit pull-left">
-                    Powered by 
-                    <a target="_blank" href="http://www.swi-prolog.org/">SWI-Prolog</a> 
-                    and the 
+                    Powered by
+                    <a target="_blank" href="http://www.swi-prolog.org/">SWI-Prolog</a>
+                    and the
                     <a target="_blank"href="http://www.swi-prolog.org/pldoc/doc_for?object=section%28%27packages/pengines.html%27%29">Pengines package</a>.
                 </p>
                 <input class="pull-right" id="slider" type='range' step='1' min='30' max='70' />
