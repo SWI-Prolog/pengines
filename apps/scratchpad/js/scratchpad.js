@@ -51,12 +51,27 @@ function print_editor_content() {
 	var windw = iframe.contentWindow;
 	windw.document.open();
     windw.document.write('</head><body><pre>');
-    windw.document.write(getProgram().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    windw.document.write(escapeHtml(getProgram()));
     windw.document.write('</pre></body></html>');
     windw.print();
     windw.document.close();
     document.body.removeChild(iframe);
 }
+
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  }
 
 
 // GUI preferences
