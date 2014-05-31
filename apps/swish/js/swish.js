@@ -522,14 +522,14 @@ $("#file-menu").on("click", "a#share", function(evt) {
     $('#share-dialog').modal();
 });
 
-$("#file-menu").on("click", "a#prefs", function(evt) {
-	evt.preventDefault();
-	$("#preferences").modal({backdrop:false});
-});
-
 $("#file-menu").on("click", "a#collaborate", function(evt) {
 	evt.preventDefault();
 	TogetherJS(this);
+});
+
+$("#file-menu").on("click", "a#prefs", function(evt) {
+	evt.preventDefault();
+	$("#preferences").modal({backdrop:false});
 });
 
 $("#file-menu").on("click", "a#print", function(evt) {
