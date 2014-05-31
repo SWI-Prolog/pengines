@@ -78,12 +78,20 @@ code {
 
 }
 
-#results {
+#console {
     position: absolute;
     top: 50px;
     bottom: 50px;
     right: 0;
     width: 50%;
+}
+
+#results {
+    position: absolute;
+    top: 0px;
+    bottom: 50px;
+    right: 0;
+    width: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
 }
@@ -101,7 +109,13 @@ code {
 
 .footer {
     text-align: center;
-    margin: 12px;
+    margin: 14px;
+}
+
+
+#slider {
+    margin-top: 3px;
+    width: 80px;
 }
 
 

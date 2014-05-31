@@ -10,6 +10,7 @@ env.editor.getSession().setMode("ace/mode/html");
 env.editor.setHighlightActiveLine(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
+env.editor.renderer.setVScrollBarAlwaysVisible(true);
 
 
 //
@@ -158,7 +159,7 @@ function updateProgram() {
 
 env.editor.getSession().on('change', function() {
 	if (!env.dirty) {
-	env.dirty = true;
+	    env.dirty = true;
 		$('#run-btn').prop('disabled', true);
 		$('#save-btn').prop('disabled', false);
 		$('#update-btn').prop('disabled', false);
@@ -244,6 +245,7 @@ $("#edit-menu").on("click", "a#find", function(evt) {
 	env.editor.commands.commands.replace.exec(env.editor, "left")
 });
 
+
 // Event handlers: Preferences
 
 $("#theme-menu").on("change", function() {
@@ -309,6 +311,25 @@ $("#line-numbering-checkbox").on("change", function() {
 		localStorage['scratchpad-line-numbering'] = value;
 	}
 });
+
+$("#slider").on("input", function() {
+    var val = this.value;
+    $("#editor").css("width", val+"%");
+    $("#console").css("width", (100-val)+"%");
+    if (val > 69) {
+        $("#console").css("display","none");
+        $("#editor").css("width", "100%");
+    } else {
+        $("#console").css("display","block");
+    }
+    if (val < 31) {
+        $("#editor").css("display","none");
+        $("#console").css("width", "100%");
+    } else {
+        $("#editor").css("display","block");
+    }
+});
+
 
 $("#run-btn").on("click", runProgram);
 
