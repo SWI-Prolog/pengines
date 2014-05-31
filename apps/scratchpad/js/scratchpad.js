@@ -132,6 +132,7 @@ env.editor.getSession().on('change', function() {
 
 $("#file-menu").on("click", "a#new", function(evt) {
 	evt.preventDefault();
+	window.location.hash = "";
 	setProgram("<html>\n"+
 		   "  <head>\n"+
 		   "    <script src=\"/vendor/jquery/jquery-2.0.3.min.js\"></script>\n"+
@@ -222,6 +223,7 @@ $("#edit-menu").on("click", "a#find", function(evt) {
 $("#example-menu").on("click", "a", function(evt) {
 	evt.preventDefault();
 	clearContent();
+	window.location.hash = "";
 	loadSrc(evt.target.href);
 });
 
