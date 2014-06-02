@@ -8,6 +8,7 @@ env.editor = ace.edit("editor");
 env.editor.setTheme("ace/theme/textmate");
 env.editor.getSession().setMode("ace/mode/html");
 env.editor.setHighlightActiveLine(false);
+env.editor.setDisplayIndentGuides(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
 env.editor.renderer.setVScrollBarAlwaysVisible(true);
