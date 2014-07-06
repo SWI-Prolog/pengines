@@ -39,7 +39,7 @@ function getProgram() {
 function setProgram(src) {
 	env.editor.setValue(src, -1);
 	env.dirty = false;
-	$('#run-btn').prop('disabled', false);
+	// $('#run-btn').prop('disabled', false);
 }
 
 // Printing
@@ -101,7 +101,7 @@ function saveProgram() {
             var file = response.file;
             window.location.hash = file;
             $("#url").val(url + "/apps/scratchpad/index.html#" + file);
-            $('#run-btn').prop('disabled', false);
+            // $('#run-btn').prop('disabled', false);
             env.dirty = false;
         });
     }
@@ -112,7 +112,7 @@ function updateProgram() {
     var program = encodeURIComponent(getProgram());
     if (program) {
          $.post("/storage/update", "file=" + file + "&program=" + program, function() {
-            $('#run-btn').prop('disabled', false);
+            // $('#run-btn').prop('disabled', false);
             env.dirty = false;
         });
     }
@@ -124,7 +124,7 @@ function updateProgram() {
 env.editor.getSession().on('change', function() {
 	if (!env.dirty) {
 	    env.dirty = true;
-		$('#run-btn').prop('disabled', true);
+		// $('#run-btn').prop('disabled', true);
 	}
 });
 
