@@ -1,5 +1,5 @@
 :- module(change_passwd, []).
-	  
+
 
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
@@ -13,15 +13,16 @@
 change_passwd(Request) :-
     http_parameters(Request,
             [ passwd(Passwd, [])
-            ]),    
+            ]),
     change_passwd(passwd, admin, Passwd),
     reply_json(json([ok= @true])).
 
 
 change_passwd(File, User, Passwd) :-
     crypt(Passwd, EncryptedPasswd),
+    setup_call_cleanup(
 	open(File, write, Stream,
-	    [ lock(write)
-	    ]),    
-    format(Stream, '~p:~@\n', [User, format(EncryptedPasswd)]),
-    close(Stream).
+	     [ lock(write)
+	     ]),
+	format(Stream, '~p:~s\n', [User, EncryptedPasswd]),
+	close(Stream)).
