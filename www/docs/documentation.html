@@ -107,16 +107,16 @@ var pengine = new Pengine(<em>options</em>);</pre>
                             <dt><code>application:<em>string</em></code></dt>
                             <dd>The name of the application in which the pengine is to be run. Default is "pengine_sandbox".</dd>
                             <dt><code>ask:<em>string</em></code></dt>
-                            <dd>The query passed to the pengine immediately after its creation. By default no query is passed.</dd>
+                            <dd>The query passed to the pengine immediately after its creation. By default no query is passed. Using this option will typically save one network roundtrip and thus using it with a deterministic query will result in just one roundtrip being made.</dd>
                             <dt><code>template:<em>string</em></code></dt>
-                            <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of template is a copy of the query.</dd>
+                            <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of this option is the variable bindings of the query passed in the ask option (a list of Name=Var pairs). Variable names in the query starting with an underscore character will however not appear in the list.</dd>
                             <dt><code>chunk:<em>integer</em></code></dt>
                             <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd> 
                             <dt><code>destroy:<em>boolean</em></code></dt>
                             <dd>Determines if the pengine is to destroy itself after having run a query to completion. Defaults to <code>true</code>.</dd>
-                            <dt><code>src:<em>string</em></code></dt>
+                            <dt><code>srctext:<em>string</em></code></dt>
                             <dd>Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>                            
-                            <dt><code>src_url:<em>string</em></code></dt>
+                            <dt><code>srcurl:<em>string</em></code></dt>
                             <dd>A URL resolving to a file containing Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>
                             <dt><code>format:<em>string</em></code></dt>
                             <dd>Determines the format of event responses. Format is a string, either <code>prolog</code>, <code>json</code> (default), or <code>json-s</code>.</dd>                            
@@ -146,8 +146,8 @@ var pengine = new Pengine(<em>options</em>);</pre>
                             <dt><code>pengine.ask(<em>query</em>, <em>options</em>)</code></dt>
                             <dd>Runs <em>query</em> in search for the first solution. Throws an error if the query is syntactically or semantically malformed or if running it could compromise the safety of the server. <em>options</em> is a JavaScript object contaning zero or more of<br /><br />
                             <dl>
-                                <dt><code>template: <em>template</em></code></dt>
-                                <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. By default the value of template is a copy of the query.</dd>
+                                <dt><code>template: <em>string</em></code></dt>
+                                <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of this option is the variable bindings of the query passed in the ask option (a list of Name=Var pairs). Variable names in the query starting with an underscore character will however not appear in the list.</dd>
                                 <dt><code>chunk: <em>integer</em></code></dt>
                                 <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd>                                
                             </dl>
