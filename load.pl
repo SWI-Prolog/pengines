@@ -19,6 +19,12 @@
 :- use_module(swish:library(pengines_io)).
 pengines:prepare_module(Module, swish, _Options) :-
 	pengines_io:pengine_bind_io_to_html(Module).
+
+
+:- pengine_application(genealogist).
+:- use_module(genealogist:'apps/genealogist/genealogist.pl').	
+	
+	
 %swish:(goal_expansion(In,Out) :-
 %	pengine_io_goal_expansion(In, Out)).
 % Libraries that are nice to have in SWISH, but cannot be loaded

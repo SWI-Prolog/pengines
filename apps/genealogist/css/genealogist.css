@@ -1,0 +1,21 @@
+/* CSS for the Genealogist application */
+
+body, input, option {
+    font-family: monospace;
+    font-size: 14px;
+}
+textarea, input, select {
+    width: 250px;
+    padding: 4px;
+}
+input.arg {
+    width: 123px;
+    padding: 4px;
+}
+input.radio {
+    width: 20px;
+    padding: 2px;
+}
+button {
+    margin: 8px 1px;
+}

@@ -1,0 +1,39 @@
+<html lang="en">   
+    <head>
+        <title>Genealogist</title>
+        <meta name="author" content="Torbjörn Lager">
+        <link rel="stylesheet" href="css/genealogist.css">
+    </head>
+    <body>
+        <h1>The Genealogist</h1>
+        <h3>Query</h3>
+        <select onchange='$("#query").val(this.value)'>
+            <option selected disabled>Sample queries</option>
+            <option value="ancestor_decendant(X, Y)">ancestor_decendant(X, Y)</option>
+            <option value="siblings(X, Y)">siblings(X, Y)</option>
+            <option value="parent_child(X, Y)">parent_child(X, Y)</option>
+            <option value="father_child(X, Y)">father_child(X, Y)</option>
+            <option value="mother_child(X, Y)">mother_child(X, Y)</option>
+        </select><br />
+        <input id="query" type="text" placeholder="Query"><br />
+        <button id="ask-btn">Ask</button>
+        <button id="next-btn" disabled>Next</button>
+        <button id="stop-btn" disabled>Stop</button>
+        <button id="abort-btn" disabled>Abort</button>
+        <button id="clear-btn">Clear</button>
+        <h3>Update</h3>
+        <input id="X" class="arg" type="text" placeholder="Parent">
+        <input id="Y" class="arg" type="text" placeholder="Child"><br />
+        Parent is: 
+        <input class="radio" type="radio" name="sex" value="father_child" checked>Male
+        <input class="radio" type="radio" name="sex" value="mother_child">Female<br />
+        <button id="assert-btn">Assert</button>
+        <button id="retract-btn">Retract</button>
+        <h3>Output</h3>
+        <div id="output"></div>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="/pengine/pengines.js"></script>
+        <script src="js/genealogist.js"></script>
+    </body>
+</html>
