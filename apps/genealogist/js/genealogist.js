@@ -1,23 +1,5 @@
 /* JavaScript for the Genealogist application */
 
-function update(op) {
-    var pred = op + $("input[name=sex]:checked").val(),
-        X = $("#X").val().toLowerCase() || '_',
-        Y = $("#Y").val().toLowerCase() || '_',
-        command = pred + '(' + X + ',' + Y + ')'
-    new Pengine({
-        application: 'genealogist',
-        ask: command,
-        onsuccess: function() {
-            writeln(command);
-            $("#X,#Y").val("");
-        },
-        onerror: function() {
-            writeln("Error: " + this.data);
-        }
-    });
-}
-
 var pengine;
 
 function ask() {
@@ -71,6 +53,24 @@ function writeln(string) {
     $('#output').append(string + "<br />")
 }
 
+function update(op) {
+    var pred = op + $("input[name=sex]:checked").val(),
+        X = $("#X").val().toLowerCase() || '_',
+        Y = $("#Y").val().toLowerCase() || '_',
+        command = pred + '(' + X + ',' + Y + ')'
+    new Pengine({
+        application: 'genealogist',
+        ask: command,
+        onsuccess: function() {
+            writeln(command);
+            $("#X,#Y").val("");
+        },
+        onerror: function() {
+            writeln("Error: " + this.data);
+        }
+    });
+}
+
 function disableButtons(ask, next, stop, abort) {
     $("#ask-btn").prop("disabled", ask);
     $("#next-btn").prop("disabled", next);
@@ -79,6 +79,9 @@ function disableButtons(ask, next, stop, abort) {
 }
 
 $(document).ready(function() {
+    $("#sample-queries").on("change", function() {
+        $("#query").val($("#sample-queries option:selected").text());
+    });
     $("#ask-btn").on("click", ask);
     $("#next-btn").on("click", next);
     $("#stop-btn").on("click", stop);
