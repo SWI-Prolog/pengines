@@ -104,8 +104,8 @@
 	        }
 			function handleSuccess() {
 	            clearBoard();
-				// this mess extracts the array of Queens
-	            setQueens(this.data[0][0].args[1]);
+
+	            setQueens(this.data[0].Queens);
 	        }
 	        function handleFailure() {
 	            $("#msg").html('No more solutions');
