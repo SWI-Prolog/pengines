@@ -1,0 +1,57 @@
+/* CSS for the Whiteboard application */
+
+body {
+    font-family: monospace;
+    font-size: 14px;
+}
+input {
+    width: 240px;
+    padding: 4px;    
+}
+input.arg {
+    width: 110px;
+}
+input.radio {
+    width: 20px;
+    padding: 2px;
+}
+button {
+    margin: 8px 1px;
+}
+
+
+.componentbar {
+	width: 64px;
+	background-color: #888888;
+	display: inline-block;
+	vertical-align: top;
+	padding: 6px;
+	border: 1px solid black;
+	margin: 0;
+	min-height: 600px;
+}
+
+#whiteboard .componentbar img {
+	width: 64px;
+	height: 64px;
+	display: block;
+	padding: 2px;
+}
+
+#whiteboard .componentbar img.selected {
+	border: 2px solid #444444;
+	padding: 0px;
+}
+
+.drawarea {
+	background-color: #AAAAAA;
+	width: 1000px;
+	height: 612px;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+

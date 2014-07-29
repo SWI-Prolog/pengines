@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">   
+    <head>
+        <title>Whiteboard</title>
+        <meta name="author" content="Anne Ogborn">
+        <link rel="stylesheet" href="css/whiteboard.css">
+    </head>
+    <body>
+        <h1>Pengine Whiteboard</h1>
+        <div id="whiteboard">
+			<div class="componentbar">
+				<img class="selected" id="rect_tool" src="img/rect.png" />
+				<img id="oval_tool" src="img/oval.png" />
+				<img id="diamond_tool" src="img/diamond.png" />
+			</div><canvas class="drawarea">
+			</canvas>
+		</div>
+		<p id="msg">sdfsd</p>
+		<p id="output">dfkds</p>
+        <!-- Placed at the end of the document so that page loads faster -->
+        <script src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="/pengine/pengines.js"></script>
+        <script src="js/whiteboard.js"></script>
+    </body>
+</html>

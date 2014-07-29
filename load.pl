@@ -22,9 +22,12 @@ pengines:prepare_module(Module, swish, _Options) :-
 
 
 :- pengine_application(genealogist).
-:- use_module(genealogist:'apps/genealogist/genealogist.pl').	
-	
-	
+:- use_module(genealogist:'apps/genealogist/genealogist.pl').
+
+:- pengine_application(whiteboard).
+:- use_module(whiteboard:'apps/whiteboard/whiteboard.pl').
+
+
 %swish:(goal_expansion(In,Out) :-
 %	pengine_io_goal_expansion(In, Out)).
 % Libraries that are nice to have in SWISH, but cannot be loaded
