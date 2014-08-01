@@ -2,10 +2,12 @@
 var whiteboard = {
 	pengine: undefined,
 	
+	currentTool: "rect",
+	
 	startEngine: function() {
 		this.pengine = new Pengine({
 			application: 'whiteboard',
-			ask: "new_whiteboard(12342349)",   // do you need the period?
+			ask: "new_whiteboard(2342353)",
 			onsuccess: function() {
 				whiteboard.writeln("success " + JSON.stringify(this.data));
 			},
@@ -19,7 +21,7 @@ var whiteboard = {
 				whiteboard.writeln("abort");
 			},
 			onerror: function() {
-				whiteboard.writeln("error");
+				whiteboard.writeln("error" + JSON.stringify(this.data));
 			}
 		});
 	},
@@ -47,7 +49,9 @@ var whiteboard = {
 	},
 
 	newElementCommit: function(e) {
-	$("#msg").text("commit " + e.clientX + " " + e.clientY);
+		$("#msg").text("commit " + e.clientX + " " + e.clientY);
+		this.pengine.respond("commit(" + this.currentTool + ", " + e.clientX + 
+		                ", " + e.clientY + ")");
 	}
 }
 
@@ -56,14 +60,17 @@ $(document).ready(function() {
 	
 	$("#rect_tool").on("click", function() {
 		whiteboard.unchoose_tools();
+		whiteboard.currentTool = "rect";
 		$("#rect_tool").addClass("selected");
 	});
 	$("#oval_tool").on("click", function() {
 		whiteboard.unchoose_tools();
+		whiteboard.currentTool = "oval";
 		$("#oval_tool").addClass("selected");
 	});
 	$("#diamond_tool").on("click", function() {
 		whiteboard.unchoose_tools();
+		whiteboard.currentTool = "diamond";
 		$("#diamond_tool").addClass("selected");
 	});
 
