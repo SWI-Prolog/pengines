@@ -1,3 +1,5 @@
+// Configuration
+
 var env = {};
 
 env.prolog = null;
@@ -13,7 +15,6 @@ env.editor.setDisplayIndentGuides(false);
 env.editor.renderer.setShowPrintMargin(false);
 env.editor.session.setFoldStyle("manual");
 env.editor.renderer.setVScrollBarAlwaysVisible(true);
-
 
 env.cmdline = ace.edit("cmdlineeditor");
 env.cmdline.setTheme("ace/theme/spyder");
@@ -38,37 +39,30 @@ env.cmdline.commands.addCommand({
 // Calling Prolog
 
 function first() {
-    if ( env.prolog ) Pengine.destroy_all(true);
-    var program = getProgram().trim();
-    env.prolog = new Pengine({
-        oncreate: handleCreate,
-        onsuccess: handleSuccess,
-        onfailure: handleFailure,
-        onstop: handleStop,
-        onprompt: handlePrompt,
-        onoutput: handleOutput,
-        onerror: handleError,
-        onabort: handleAbort,
-        destroy: false,
-        format: 'json-html',
-        application: "swish",
-        src: program
-    });
-}
-
-function ask() {
-    var query = getGoal();
-    query = query.replace(/^\?-/, '');
-    query = query.trim();
+    if (env.prolog) Pengine.destroy_all(true);
+    var query = getGoal().trim().replace(/^\?-/, '');
     if (query) {
-	    addmsg(renderQuery("?- " + query  + "."), "goal");
-	    updateHistory(query);
-	    disableButtons(true, true, true, false);
-	    env.prolog.ask(query);
+        addmsg(renderQuery("?- "+query+"."), "goal");
+        updateHistory(query);
+        disableButtons(true, true, true, false);
+        env.prolog = new Pengine({
+            application: "swish",
+            src: getProgram(),
+            ask: query,
+            destroy: false,
+            format: 'json-html',
+            onsuccess: handleSuccess,
+            onfailure: handleFailure,
+            onstop: handleStop,
+            onprompt: handlePrompt,
+            onoutput: handleOutput,
+            onerror: handleError,
+            onabort: handleAbort
+        });
     }
 }
 
-function more() {
+function next() {
     addmsg(" ;<br />", "solution");
     env.prolog.next();
 }
@@ -86,7 +80,7 @@ function clear() {
     $("#presentation").html("");
 }
 
-function read() {
+function respond() {
     var reader = $("#reader");
     var str = reader.val();
     if (str) {
@@ -100,48 +94,33 @@ function read() {
     }
 }
 
+
 // Handling Prolog callbacks
-
-function handleCreate() {
-    ask();
-}
-
-function queryDone() {
-    newQuery = true;
-    disableButtons(false, true, true, true);
-    if ( !env.prolog.options.destroy ) {
-        env.prolog.destroy();
-    }
-}
 
 function handleSuccess() {
     var html;
-	var answer = this.data[0];
-	if ( answer.variables.length > 0 ||
-	     answer.residuals ) {
-	    html = renderAnswer(answer)
-	} else {
-	    html = "<span class='true'>true</span>";
-	}
-	if (this.more) {
-		addmsg(html, "solution");
-		disableButtons(true, false, false, true);
-	} else {
-		addmsg(html + ".<br />", "solution");
-		$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
-		queryDone();
-	}
+    var answer = this.data[0];
+    if (answer.variables.length > 0 || answer.residuals) {
+        html = renderAnswer(answer)
+    } else {
+        html = "<span class='true'>true</span>";
+    }
+    if (this.more) {
+        addmsg(html, "solution");
+        disableButtons(true, false, false, true);
+    } else {
+        addmsg(html + ".<br />", "solution");
+        queryDone('#FAFFF4');
+    }
 }
 
 function handleFailure() {
     addmsg("false.<br />", "solution false")
-	$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
-    queryDone();
+    queryDone('#FAFFF4');
 }
 
 function handleStop() {
-	$("#presentation .alert:last-child").css('background-color', '#FAFFF4');
-    queryDone();
+    queryDone('#FAFFF4');
 }
 
 function handlePrompt() {
@@ -175,16 +154,13 @@ function escapeHtml(string) {
 
 function handleError() {
     var msg = String(this.data).replace(new RegExp("'"+env.prolog.id+"':", 'g'), "");
-
     addmsg("<pre class='msg-error'>"+escapeHtml(msg)+"</pre>", "error");
-    $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
-    queryDone();
+    queryDone('#FFF2F0');
 }
 
 function handleAbort() {
     addmsg("<br />** Execution aborted **", "error");
-    $("#presentation .alert:last-child").css('background-color', '#FFF2F0');
-    queryDone();
+    queryDone('#FFF2F0');
     var reader = $("#reader");
     reader.val("");
     reader.prop("disabled", true);
@@ -192,11 +168,20 @@ function handleAbort() {
 	reader.prop("placeholder", "");
 }
 
+function queryDone(color) {
+    newQuery = true;
+    disableButtons(false, true, true, true);
+    $("#presentation .alert:last-child").css('background-color', color);
+    if (!env.prolog.options.destroy) {
+        env.prolog.destroy();
+    }
+}
+
 
 // Getting and setting program and goal
 
 function getProgram() {
-    return env.editor.getValue()
+    return env.editor.getValue().trim();
 }
 
 function setProgram(src) {
@@ -207,8 +192,7 @@ function setProgram(src) {
 }
 
 function getGoal() {
-    var val = env.cmdline.getValue();
-    val = val.trim();
+    var val = env.cmdline.getValue().trim();
     if (val.charAt(val.length-1) === ".") {
         return val.slice(0, -1);
     } else {
@@ -228,7 +212,7 @@ var newQuery = true;
 
 function addmsg(msg, style) {
     if (newQuery || $("#presentation").is(':empty') ) {
-        $("#presentation").append('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>');
+        $("#presentation").append('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button></div>');
         newQuery = false
     }
     $("#presentation .alert:last-child").append("<span class='" + theme() + " " + style + "'>" + msg + "</span>");
@@ -258,45 +242,43 @@ function renderQuery(query) {
 function renderAnswer(answer) {
     var html = "";
     var bindings = answer.variables;
-    for (var i=0; i<bindings.length; i++) {
-       var vars = bindings[i].variables;
-
-       for (var v=0; v<vars.length-1; v++) {
-	   html += "<span class='pl-var'>"+vars[v]+"</span> = " +
-		   "<span class='pl-var'>"+vars[v+1]+"</span>, ";		         }
-       html += "<span class='pl-var'>"+vars[vars.length-1]+"</span> = ";
-       html += bindings[i].value;
-       if ( bindings[i].substitutions ) {
-	   var substs = bindings[i].substitutions;
-	   html += ', <span class="pl-comment">% where</span><br/>';
-	   for(var s=0; s<substs.length; s++) {
-	       html += '<span class="where-binding">';
-	       html += "<span class='pl-var'>"+substs[s].var+"</span> = ";
-	       html += substs[s].value;
-	       html += '</span>';
-	       if ( s < substs.length-1 )
-		 html += ",<br/>";
-	   }
-       }
-       if ( i < bindings.length-1 || answer.residuals )
-	   html += ",<br/>";
+    for (var i = 0; i < bindings.length; i++) {
+        var vars = bindings[i].variables;
+        for (var v = 0; v < vars.length - 1; v++) {
+            html += "<span class='pl-var'>" + vars[v] + "</span> = " +
+                "<span class='pl-var'>" + vars[v + 1] + "</span>, ";
+        }
+        html += "<span class='pl-var'>" + vars[vars.length - 1] + "</span> = ";
+        html += bindings[i].value;
+        if (bindings[i].substitutions) {
+            var substs = bindings[i].substitutions;
+            html += ', <span class="pl-comment">% where</span><br/>';
+            for (var s = 0; s < substs.length; s++) {
+                html += '<span class="where-binding">';
+                html += "<span class='pl-var'>" + substs[s].var+"</span> = ";
+                html += substs[s].value;
+                html += '</span>';
+                if (s < substs.length - 1) html += ",<br/>";
+            }
+        }
+        if (i < bindings.length - 1 || answer.residuals) html += ",<br/>";
     }
-    if ( (residuals = answer.residuals) ) {
-        for(var i=0; i<residuals.length; i++) {
-	    html += residuals[i];
-	    if ( i < residuals.length-1 )
-	        html += ",<br/>";
-	}
+    if ((residuals = answer.residuals)) {
+        for (var i = 0; i < residuals.length; i++) {
+            html += residuals[i];
+            if (i < residuals.length - 1)
+                html += ",<br/>";
+        }
     }
     return html;
 }
 
 function disableButtons(first, next, stop, abort) {
     $("#first-btn").prop("disabled", first);
-    $("#more-btn").prop("disabled", next);
+    $("#next-btn").prop("disabled", next);
     $("#stop-btn").prop("disabled", stop);
     $("#abort-btn").prop("disabled", abort);
-    if (!next) $("#more-btn").focus();
+    if (!next) $("#next-btn").focus();
 }
 
 
@@ -430,7 +412,7 @@ function extractExamples() {
     for (var i in ranges) {
         var examplegroup = [];
         var row = ranges[i].start.row;
-        for (var j = row + 1; ; j++) {
+        for (var j = row + 1;; j++) {
             var ex = doc.getLine(j).trim();
             if (ex == "*/") {
                 break;
@@ -673,14 +655,14 @@ $("#clear-btn-query").on("click", function() {
 });
 
 $("#first-btn").on("click", first);
-$("#more-btn").on("click", more);
+$("#next-btn").on("click", next);
 $("#stop-btn").on("click", stop);
 $("#abort-btn").on("click", abort);
 $("#clear-btn").on("click", clear);
 
 $("#reader").on("keyup", function(evt) {
 	if (evt.keyCode == 13) {
-		read();
+		respond();
 	}
 });
 
