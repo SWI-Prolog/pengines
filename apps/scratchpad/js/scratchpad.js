@@ -252,6 +252,14 @@ $("#slider").on("input", function() {
     }
 });
 
+$("#show-checkbox").on("change", function() {
+	var value = $("#show-checkbox").prop('checked');
+	if (localStorage) {
+		localStorage['scratchpad-show-about'] = !value;
+	}
+});
+
+
 
 // GUI preferences
 
@@ -369,20 +377,23 @@ $("#line-numbering-checkbox").on("change", function() {
 
 
 function parseBoolean(value) {
-	return value == "true" ? true : false;
+	return value === "true" ? true : false;
 }
 
 $(document).ready(function() {
+    var showAbout = true;
 	if (localStorage && localStorage.length > 0) {
 		setTheme(localStorage['scratchpad-theme']);
 	    setFontFamily(localStorage['scratchpad-font-family']);
 	    setFontSize(localStorage['scratchpad-font-size']);
 	    setTabSize(parseInt(localStorage['scratchpad-tab-size'], 10));
-	    setLineWrap(parseBoolean(localStorage['scratchpad-line-wrap']));
-	    setLineHighlight(parseBoolean(localStorage['scratchpad-line-highlight']));
-	    setShowGutter(parseBoolean(localStorage['scratchpad-line-numbering']));
-	    setUseSoftTabs(parseBoolean(localStorage['scratchpad-tab-soft']));
+	    setLineWrap(parseBoolean(localStorage['scratchpad-line-wrap']) || true);
+	    setLineHighlight(parseBoolean(localStorage['scratchpad-line-highlight']) || false);
+	    setShowGutter(parseBoolean(localStorage['scratchpad-line-numbering']) || true);
+	    setUseSoftTabs(parseBoolean(localStorage['scratchpad-tab-soft']) || true);
+	    showAbout = parseBoolean(localStorage['scratchpad-show-about']);
 	}
+    if (showAbout) $('#about').modal();
     maybeLoadSrc();
 });
 
