@@ -7,7 +7,7 @@ function ask() {
     if (query) {
         pengine = new Pengine({
             application: 'genealogist',
-            ask: $("#query").val(),
+            ask: query,
             onsuccess: function() {
                 writeln(JSON.stringify(this.data));
                 if (this.more) {
@@ -49,16 +49,13 @@ function abort() {
     pengine.abort();
 }
 
-function writeln(string) {
-    $('#output').append(string + "<br />")
-}
 
 function update(op) {
     var pred = op + $("input[name=sex]:checked").val(),
         X = $("#X").val().toLowerCase() || '_',
         Y = $("#Y").val().toLowerCase() || '_',
-        command = pred + '(' + X + ',' + Y + ')'
-    new Pengine({
+        command = pred + '(' + X + ',' + Y + ')';
+    Pengine({
         application: 'genealogist',
         ask: command,
         onsuccess: function() {
@@ -71,12 +68,18 @@ function update(op) {
     });
 }
 
+
+function writeln(string) {
+    $('#output').append(string + "<br />");
+}
+
 function disableButtons(ask, next, stop, abort) {
     $("#ask-btn").prop("disabled", ask);
     $("#next-btn").prop("disabled", next);
     $("#stop-btn").prop("disabled", stop);
     $("#abort-btn").prop("disabled", abort);
 }
+
 
 $(document).ready(function() {
     $("#sample-queries").on("change", function() {
@@ -87,10 +90,10 @@ $(document).ready(function() {
     $("#stop-btn").on("click", stop);
     $("#abort-btn").on("click", abort);
     $("#assert-btn").on("click", function() {
-        update('assert_')
+        update('assert_');
     });
     $("#retract-btn").on("click", function() {
-        update('retract_')
+        update('retract_');
     });
     $("#clear-btn").on("click", function() {
         $('#output').html('');

@@ -1,0 +1,476 @@
+<html>
+	<head>
+		<title></title>
+		<link href="prettify/tomorrow.css" type="text/css" rel="stylesheet" />
+<!--		<link href="prettify/hemisu-light.css" type="text/css" rel="stylesheet" /> -->
+<!--		<link href="prettify/github.css" type="text/css" rel="stylesheet" /> -->
+<!--		<link href="prettify/solarized-light.css" type="text/css" rel="stylesheet" /> -->
+        <script type="text/javascript" src="prettify/prettify.js"></script>
+        <script type="text/javascript" src="prettify/lang-erlang.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+
+<h1>The Genealogist: Your first real Pengines application</h1>
+
+<p>
+A <i>genealogist</i> is a person who traces or studies the descent of persons or families. Since a logic program capable of reasoning about family relations happens to be the "Hello World" of Prolog, we thought it would be appropriate to stick to this domain when building our first Pengines application. A typical example of such a program would be a file with the following content:</p>
+
+<pre  class="prettyprint lang-erlang linenums" ext="">
+ancestor_decendant(X, Y) :- parent_child(X, Y).
+ancestor_decendant(X, Z) :- parent_child(X, Y), ancestor_decendant(Y, Z).
+
+siblings(X, Y) :- parent_child(Z, X), parent_child(Z, Y), X @&lt; Y.
+
+parent_child(X, Y) :- mother_child(X, Y).
+parent_child(X, Y) :- father_child(X, Y).
+
+mother_child(trude, sally).
+
+father_child(tom, sally).
+father_child(tom, erica).
+father_child(mike, tom).
+</pre>
+
+<p>
+The first thing we need to do is to make this into an SWI-Prolog <i>module</i>. We do this by sticking a <a href="http://www.swi-prolog.org/pldoc/man?predicate=module/2">module declaration</a> at the top of the file, like so:</p>
+
+<pre  class="prettyprint lang-erlang linenums" ext="">
+:- module(genealogist,
+      [  ancestor_decendant/2,
+         siblings/2,
+         parent_child/2,
+         father_child/2,
+         mother_child/2
+      ]).
+
+ancestor_decendant(X, Y) :- parent_child(X, Y).
+ancestor_decendant(X, Z) :- parent_child(X, Y), ancestor_decendant(Y, Z).
+
+siblings(X, Y) :- parent_child(Z, X), parent_child(Z, Y), X @&lt; Y.
+
+parent_child(X, Y) :- mother_child(X, Y).
+parent_child(X, Y) :- father_child(X, Y).
+
+mother_child(trude, sally).
+
+father_child(tom, sally).
+father_child(tom, erica).
+father_child(mike, tom).
+</pre>
+
+<p>
+Note that we export the predicates that should be accessible from the client. In this case, this means all predicates that are defined in the file, but often this is not the case. </p>
+
+<p>
+We then save our file as <code>genealogist.pl</code>, create a new directory <code>genealogist</code> under <code>./apps</code>, and place the module file in it. Our directory structure under <code>./apps</code> should now be the following:</p>
+
+<pre  class="prettyprint lang-erlang" ext="">
+apps/
+   genealogist/
+      genealogist.pl
+   swish\
+   scratchpad\
+</pre>
+
+<p>
+But we are not done yet. We must also insert the following declarations in the file <code>./load.pl</code>:</p>
+
+<pre  class="prettyprint lang-erlang linenums" ext="">
+:- pengine_application(genealogist).
+:- use_module(genealogist:'/apps/genealogist/genealogist.pl').
+</pre>
+
+<p>
+[Note: Where we put such declarations may change in a future version of Pengines.]</p>
+
+<p>
+The first declaration merely names your application. (There is no need to give the application the same name as the directory, but it makes some sense to do so.) The second declaration imports the predicates exported by the module <code>genealogist</code> into the application module (which happens to have the same name here too, but nor is this required).</p>
+
+<p>
+At last, we may (re)start our Pengines server and test our application. We can for example use an ordinary SWI-Prolog shell, perhaps running on another machine:</p>
+
+<pre  class="prettyprint lang-erlang linenums" ext="">
+?- use_module(library(pengines)).
+true.
+
+?- pengine_rpc('http://localhost:3030', ancestor_decendant(X, Y), [
+       application(genealogist)
+   ]).
+X = trude,
+Y = sally ;
+X = tom,
+Y = sally ;
+X = tom,
+Y = erica ;
+X = mike,
+Y = tom ;
+X = mike,
+Y = sally ;
+X = mike,
+Y = erica ;
+false.
+
+?-
+</pre>
+
+<p>
+In <a href="http://www.swi-prolog.org/pengines/GenealogistGUI.txt">Part 2 of this tutorial</a> we are going to add a simple web-based GUI to our application.</p>
+
+<h2>Part 2</h2>
+
+<p>
+In <a href="http://www.swi-prolog.org/pengines/Genealogist.html">part 1 of this tutorial</a> we built a Pengines based web-service capable of serving up solutions to queries about family relations over HTTP. In this part we shall create a simple web GUI for our Genealogist application.</p>
+
+<p>
+Here is the HTML we shall work with:</p>
+
+<pre class="prettyprint linenums" ext="">
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+      &lt;script src="/vendor/jquery/jquery-2.0.3.min.js"&gt;&lt;/script&gt;
+      &lt;script src="/pengine/pengines.js"&gt;&lt;/script&gt;
+      &lt;style&gt;
+          body, input, textarea {
+              font-family: monospace;
+              font-size: 14px;
+          }
+          textarea, input {
+              width: 300px;
+              padding: 4px;
+          }
+      &lt;/style&gt;
+      &lt;script type="text/javascript"&gt;
+          var pengine;
+          function query() {
+              pengine = new Pengine({
+                  application: 'genealogist',
+                  ask: $("#query").val(),
+                  onsuccess: handleSuccess,
+                  onfailure: handleFailure,
+                  onerror:   handleError
+              });
+          }
+          function handleSuccess() {
+              var solution = JSON.stringify(this.data);
+              writeln(solution);
+              if (!this.more) {
+                  writeln("No more solutions");
+              }
+          }
+          function handleFailure() {
+              writeln("No more solutions");
+          }
+          function handleError() {
+              writeln(this.data);
+          }
+          function writeln(string) {
+              $('#output').append(string + "&lt;br /&gt;")
+          }
+      &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+      &lt;h1&gt;The Genealogist&lt;/h1&gt;
+      &lt;h3&gt;Query&lt;/h3&gt;
+      &lt;input type="text" id="query" value="ancestor_decendant(X,Y)"&gt;
+      &lt;button onclick="query()"&gt;Ask&lt;/button&gt;
+      &lt;button onclick="pengine.next()"&gt;Next&lt;/button&gt;
+      &lt;button onclick="pengine.stop()"&gt;Stop&lt;/button&gt;
+      &lt;h3&gt;Output&lt;/h3&gt;
+      &lt;div id="output"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+We then need to make this HTML file available to the server. It can be placed anywhere from where it can be retrieved and served to an external browser, but we think that it sits most comfortably in the <code>./apps/genealogist</code> directory, along with the Prolog file.</p>
+
+<pre class="code" ext="">
+apps/
+   genealogist/
+      genealogist.pl
+      index.html
+   swish\
+   scratchpad\
+</pre>
+
+<p>
+The application can now be tested. We don't even have to restart the server. All we need need to know is the URL pointing to the application. If you are running your Pengines installation as the default <code>localhost:3030</code> that would be:</p>
+
+<pre class="code" ext="">
+http://localhost:3030/apps/genealogist/index.html
+</pre>
+
+<p>
+In <a href="http://www.swi-prolog.org/pengines/GenealogistUpdate.html">the next part of the tutorial</a> we are going to implement support for updating the database of parent-child relationships.</p>
+
+
+<p>
+In this part of our tutorial we are going to add update capabilities to our application. It is in general not wise to allow a client to use <a class="builtin" href="/pldoc/man?predicate=assert/1">assert/1</a> and <a class="builtin" href="/pldoc/man?predicate=retract/1">retract/1</a> directly on the application's database. It is better to wrap <a class="builtin" href="/pldoc/man?predicate=assert/1">assert/1</a> and <a class="builtin" href="/pldoc/man?predicate=retractall/1">retractall/1</a> in predicates that are then exported by (one of) the application modules. This is exactly what we are doing below.</p>
+
+<pre class="prettyprint linenums lang-erlang" ext="">
+:- module(genealogist,
+      [  ancestor_decendant/2,
+         siblings/2,
+         parent_child/2,
+         father_child/2,
+         mother_child/2,
+         assert_father_child/2,
+         assert_mother_child/2,
+         retract_father_child/2,
+         retract_mother_child/2
+      ]).
+
+
+ancestor_decendant(X, Y) :- parent_child(X, Y).
+ancestor_decendant(X, Z) :- parent_child(X, Y), ancestor_decendant(Y, Z).
+
+siblings(X, Y) :- parent_child(Z, X), parent_child(Z, Y), X @&lt; Y.
+
+parent_child(X, Y) :- mother_child(X, Y).
+parent_child(X, Y) :- father_child(X, Y).
+
+
+
+:- dynamic mother_child/2, father_child/2.
+
+assert_mother_child(Mother, Child) :-
+      assert(mother_child(Mother, Child)).
+
+assert_father_child(Father, Child) :-
+      assert(father_child(Father, Child)).
+      
+retract_mother_child(Mother, Child) :-
+      retractall(mother_child(Mother, Child)).
+
+retract_father_child(Father, Child) :-
+      retractall(father_child(Father, Child)).
+</pre>
+
+<p>
+Note that we have deleted the facts for <span class="undef">mother_child/2</span> and <span class="undef">father_child/2</span> from the file. The clients will now have to assert such facts before any genealogist queries can succeed. Like this for example:</p>
+
+<pre class="prettyprint linenums lang-erlang" ext="">
+?- use_module(library(pengines)).
+true.
+
+?- pengine_rpc('http://localhost:3030', assert_mother_child(trude, sally), [
+     application(genealogist)
+ ]).
+true.
+
+?- pengine_rpc('http://localhost:3030', ancestor_decendant(X, Y), [
+     application(genealogist)
+ ]).
+X = trude,
+Y = sally ;
+false.
+
+?-
+</pre>
+
+<p>
+In <a href="http://www.swi-prolog.org/pengines/GenealogistMoreGUI.html">part 4 of this tutorial</a> we are going to revise our HTML in order to build the necessary GUI parts for supporting updating. In fact, we are are going to revise the whole Genealogist application quite substantially, by for example splitting it up into separate files for HTML, CSS and JavaScript, in the way that is usually recommended for doing web development.</p>
+
+
+<p>
+In this part of the tutorial we will add GUI parts for the db updating functionality that we added in <a href="http://www.swi-prolog.org/pengines/GenealogistUpdate.html">part 3</a>. From now on we are also going to try to adhere to the so called <a href="http://en.wikipedia.org/wiki/Separation_of_concerns">principle of separation of concerns</a> and split our HTML, CSS and JavaScript up into separate files. Here is how the apps directory looks like in the final version of our web application:</p>
+
+<pre class="code" ext="">
+apps/
+ genealogist/
+    genealogist.pl
+    index.html
+    js/
+       genealogist.js
+    css/
+       genealogist.css
+ swish\
+ scratchpad\
+</pre>
+
+<p>
+The file <code>genealogist.pl</code> has not changed since part 3, so we will not say more about it here. The CSS in <code>genealogist.css</code> is fairly uninteresting so we keep silent abot that too. Let us begin by looking at the HTML:</p>
+
+<pre class="prettyprint linenums" ext="">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+      &lt;title&gt;Genealogist&lt;/title&gt;
+      &lt;meta name="author" content="Torbjörn Lager"&gt;
+      &lt;link rel="stylesheet" href="css/genealogist.css"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+      &lt;h1&gt;The Genealogist&lt;/h1&gt;
+      &lt;!-- Here starts the part of the GUI that was already in part 2 --&gt;
+      &lt;h3&gt;Query&lt;/h3&gt;
+      &lt;div&gt;
+          &lt;select id="sample-queries"&gt;
+              &lt;option selected disabled&gt;Sample queries&lt;/option&gt;
+              &lt;option&gt;ancestor_decendant(X, Y)&lt;/option&gt;
+              &lt;option&gt;siblings(X, Y)&lt;/option&gt;
+              &lt;option&gt;parent_child(X, Y)&lt;/option&gt;
+              &lt;option&gt;father_child(X, Y)&lt;/option&gt;
+              &lt;option&gt;mother_child(X, Y)&lt;/option&gt;
+          &lt;/select&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+          &lt;input id="query" type="text" placeholder="Query"&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+          &lt;button id="ask-btn"&gt;Ask&lt;/button&gt;
+          &lt;button id="next-btn" disabled&gt;Next&lt;/button&gt;
+          &lt;button id="stop-btn" disabled&gt;Stop&lt;/button&gt;
+          &lt;button id="abort-btn" disabled&gt;Abort&lt;/button&gt;
+          &lt;button id="clear-btn"&gt;Clear&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;!-- Here start the new part for updating the application db --&gt;
+      &lt;h3&gt;Update&lt;/h3&gt;
+      &lt;div&gt;
+          &lt;input id="X" class="arg" type="text" placeholder="Parent"&gt;
+          &lt;input id="Y" class="arg" type="text" placeholder="Child"&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+          Parent is:
+          &lt;input class="radio" type="radio" name="sex" value="father_child" checked&gt;Male
+          &lt;input class="radio" type="radio" name="sex" value="mother_child"&gt;Female
+      &lt;/div&gt;
+      &lt;div&gt;
+          &lt;button id="assert-btn"&gt;Assert&lt;/button&gt;
+          &lt;button id="retract-btn"&gt;Retract&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;h3&gt;Output&lt;/h3&gt;
+      &lt;div id="output"&gt;&lt;/div&gt;
+      &lt;!-- Placed at the end of the document so that page loads faster --&gt;
+      &lt;script src="/vendor/jquery/jquery-2.0.3.min.js"&gt;&lt;/script&gt;
+      &lt;script src="/pengine/pengines.js"&gt;&lt;/script&gt;
+      &lt;script src="js/genealogist.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+Stripped from JavaScript and styling information it does a pretty good job at describing the structure of our GUI.</p>
+
+<p>
+Here is the JavaScript file:</p>
+
+<pre class="prettyprint linenums" ext="">
+/* JavaScript for the Genealogist application */
+
+var pengine;
+
+function ask() {
+  var query = $("#query").val();
+  if (query) {
+      pengine = new Pengine({
+          application: 'genealogist',
+          ask: query,
+          onsuccess: function() {
+              writeln(JSON.stringify(this.data));
+              if (this.more) {
+                  disableButtons(true, false, false, false);
+              } else {
+                  writeln("No more solutions");
+                  disableButtons(false, true, true, true);
+              }
+          },
+          onfailure: function() {
+              writeln("Failure");
+              disableButtons(false, true, true, true);
+          },
+          onstop: function() {
+              writeln("Stopped");
+              disableButtons(false, true, true, true);
+          },
+          onabort: function() {
+              writeln("Aborted");
+              disableButtons(false, true, true, true);
+          },
+          onerror: function() {
+              writeln("Error: " + this.data);
+              disableButtons(false, true, true, true);
+          }
+      });
+  }
+}
+
+function next() {
+  pengine.next();
+}
+
+function stop() {
+  pengine.stop();
+}
+
+function abort() {
+  pengine.abort();
+}
+
+
+function update(op) {
+  var pred = op + $("input[name=sex]:checked").val(),
+      X = $("#X").val().toLowerCase() || '_',
+      Y = $("#Y").val().toLowerCase() || '_',
+      command = pred + '(' + X + ',' + Y + ')';
+  Pengine({
+      application: 'genealogist',
+      ask: command,
+      onsuccess: function() {
+          writeln(command);
+          $("#X,#Y").val("");
+      },
+      onerror: function() {
+          writeln("Error: " + this.data);
+      }
+  });
+}
+
+
+function writeln(string) {
+  $('#output').append(string + "&lt;br /&gt;");
+}
+
+function disableButtons(ask, next, stop, abort) {
+  $("#ask-btn").prop("disabled", ask);
+  $("#next-btn").prop("disabled", next);
+  $("#stop-btn").prop("disabled", stop);
+  $("#abort-btn").prop("disabled", abort);
+}
+
+
+$(document).ready(function() {
+  $("#sample-queries").on("change", function() {
+      $("#query").val($("#sample-queries option:selected").text());
+  });
+  $("#ask-btn").on("click", ask);
+  $("#next-btn").on("click", next);
+  $("#stop-btn").on("click", stop);
+  $("#abort-btn").on("click", abort);
+  $("#assert-btn").on("click", function() {
+      update('assert_');
+  });
+  $("#retract-btn").on("click", function() {
+      update('retract_');
+  });
+  $("#clear-btn").on("click", function() {
+      $('#output').html('');
+  });
+});
+
+</pre>
+
+<p>
+So, where are we? Well, the Genealogist should now allow us to:</p>
+<ul>
+<li>Query the database from more than one client at a time.</li>
+<li>Update the database of parent-child relationships incrementally and from more that one client at a time.</li>
+<li>All this without compromising the safety of the pengine server</li>
+</ul>
+
+<p>
+There are still some problems left to be solved. For example, if you shut down the server and start it again, the database will turn out to be empty. Here, we will only point you to <a class="file" href="/pldoc/doc/swi/library/persistency.pl">library(persistency)</a> which may be able to help. </p></div>
+
+
+	</body>
+</html>
+
