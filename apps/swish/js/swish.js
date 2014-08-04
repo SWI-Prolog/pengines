@@ -684,10 +684,10 @@ $(document).ready(function() {
 		setFontFamily(localStorage['swish-font-family']);
 		setFontSize(localStorage['swish-font-size']);
 		setTabSize(parseInt(localStorage['swish-tab-size'], 10));
-		setLineWrap(parseBoolean(localStorage['swish-line-wrap']));
-		setLineHighlight(parseBoolean(localStorage['swish-line-highlight']));
-		setShowGutter(parseBoolean(localStorage['swish-line-numbering']));
-		setUseSoftTabs(parseBoolean(localStorage['swish-tab-soft']));
+		setLineWrap(parseBoolean(localStorage['swish-line-wrap']) || true);
+		setLineHighlight(parseBoolean(localStorage['swish-line-highlight']) || false);
+		setShowGutter(parseBoolean(localStorage['swish-line-numbering']) || true);
+		setUseSoftTabs(parseBoolean(localStorage['swish-tab-soft']) || true);
 	}
     maybeLoadSrc();
     setGoal("?- ");
