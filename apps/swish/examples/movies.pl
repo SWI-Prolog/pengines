@@ -1,40 +1,60 @@
-/*
+/* Here's a first version of a set of exercises for practising the querying
+of a simple Prolog database, in this case a movie database (see below).  
+Modified from exercises found on the web. Not sure who first made them.  */
 
-How The Facts Are Stated
 
-The bold text in the four examples below indicates the format of the facts in the movies database.
+/* EXERCISES
 
-movie(M,Y) = movie M came out in year Y
-movie(american_beauty, 1999).
-director(M,D) = movie M was directed by director D
-director(american_beauty, sam_mendes).
-actor(M,A,R) = actor A played role R in movie M
-actor(american_beauty, kevin_spacey, lester_burnham).
-actress(M,A,R) = actress A played role R in movie M
-actress(american_beauty, annette_bening, carolyn_burnham).
-Write queries to answer the following questions. Remember to press the semi-colon after each result until all the possible answers are revealed.
+Part 1: Write queries to answer the following questions.
 
-In which year was the movie American Beauty released?
-Find the movies released in the year 2000.
-Find the movies released before 2000. ( eg movie(X, Y), Y<2000. )
-Find the movies released after 1990.
-Find an actor who has appeared in more than one movie. (2 queries with the same variable for actor, different for movie and role. You must also state that the first movie variable cannot equal the second).
-Find a director who has directed a movie in which the actress Scarlett Johansson appeared.
-Find an actor who has also directed a movie.
-Find an actor or actress who has also directed a movie.(Use the semi-colon to separate out the two queries, actors will be found first)
-Find the movie in which John Goodman and Jeff Bridges were co-stars.
-Find the movies in which Steve Buscemi and John Goodman were both actors.
-Add rules to the database to do the following,
+    a. In which year was the movie American Beauty released?
+    b. Find the movies released in the year 2000.
+    c. Find the movies released before 2000.
+    d. Find the movies released after 1990.
+    e. Find an actor who has appeared in more than one movie.
+    f. Find a director of a movie in which Scarlett Johansson appeared.
+    g. Find an actor who has also directed a movie.
+    h. Find an actor or actress who has also directed a movie.
+    i. Find the movie in which John Goodman and Jeff Bridges were co-stars.
 
-released_after(M, Y) - the movie was released after the given yeaar
-released_before(M, Y) - the movie was released before the given year
-same_year(M1, M2) - the movies are released in the same year
-co_star(A1, A2) - the actor/actress are in the same movie
+Part 2: Add rules to the database to do the following,
+
+    a. released_after(M, Y) <- the movie was released after the given year.
+    b. released_before(M, Y) <- the movie was released before the given year.
+    c. same_year(M1, M2) <- the movies are released in the same year.
+    d. co_star(A1, A2) <- the actor/actress are in the same movie.
 
 */
 
-:- style_check(-discontiguous).  %allow discontiguous predicates
- 
+/** Examples (Remove these if you want to give the exercises to students!)
+
+    movie(american_beauty, Y).
+    movie(M, 2000).
+    movie(M, Y), Y < 2000.
+    movie(M, Y), Y > 1999.
+    actor(M1, A, _), actor(M2, A, _), M1 @> M2.
+    actress(M, scarlett_johansson, _), director(M, D).
+    actor(_, A, _), director(_, A).
+    (actor(_, A, _) ; actress(_, A, _)), director(_, A).
+    actor(M, john_goodman, _), actor(M, jeff_bridges, _).
+
+*/
+
+/* DATABASE
+
+    movie(M, Y) <- movie M came out in year Y
+    director(M, D) <- movie M was directed by director D
+    actor(M, A, R) <- actor A played role R in movie M
+    actress(M, A, R) <- actress A played role R in movie M
+
+*/
+
+:- discontiguous 
+        movie/2, 
+        director/2, 
+        actor/3, 
+        actress/3.
+    
 movie(american_beauty, 1999).
 director(american_beauty, sam_mendes).
 actor(american_beauty, kevin_spacey, lester_burnham).
@@ -3007,4 +3027,3 @@ actor(untitled_woody_allen_fall_project_2006, colin_salmon, '').
 movie(a_view_from_the_bridge, 2006).
 actress(a_view_from_the_bridge, scarlett_johansson, catherine).
 actor(a_view_from_the_bridge, anthony_lapaglia, eddie_carbone).
- 
