@@ -1,13 +1,12 @@
-
 <!-- 
 Here, handlebars.js (http://handlebarsjs.com/) provides us with client-side templating.
 -->
 <html lang="en">   
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <script type="text/javascript" src="/vendor/jquery/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="/vendor/handlebars/handlebars.js"></script>
-        <script type="text/javascript" src="/pengine/pengines.js"></script>
+        <script src="/vendor/jquery/jquery-2.0.3.min.js"></script>
+        <script src="/vendor/handlebars/handlebars.js"></script>
+        <script src="/pengine/pengines.js"></script>
         <style type="text/css">
             table {
                 font-family: monotype;
@@ -63,7 +62,7 @@ Here, handlebars.js (http://handlebarsjs.com/) provides us with client-side temp
                 sort(Rows, SortedRows).
                          
         </script>
-        <script type="text/javascript">
+        <script>
             var template = $('#myTemplate').html();
             var compiledTemplate = Handlebars.compile(template);
             
