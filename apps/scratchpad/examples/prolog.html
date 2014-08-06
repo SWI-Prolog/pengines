@@ -1,4 +1,3 @@
- 
 <html lang="en">   
 	<head>
 	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -16,11 +15,14 @@
 	    </style>
 	    <script type="text/javascript">
 	        var pengine;
-	    	function write(string) {
-	    		$('#output').append(string + "<br />")
-	    	}
-    	    function handleCreate() {
-        	    pengine.ask( $("#query").val());
+		    function query() {
+    		    pengine = new Pengine({
+    		        ask: $("#query").val(),
+    		        onsuccess: handleSuccess,
+    		        onfailure: handleFailure,
+    		        onerror:   handleError,
+    		        src: $("#src").val()
+    		    });
 		    }
 		    function handleSuccess() {
 		        var solution = JSON.stringify(this.data);
@@ -35,15 +37,9 @@
 		    function handleError() {
 		        write(this.data);
 		    }
-		    function query() {
-    		    pengine = new Pengine({
-                    oncreate: handleCreate,
-    		        onsuccess: handleSuccess,
-    		        onfailure: handleFailure,
-    		        onerror:   handleError,
-    		        src: $("#src").val()
-    		    });
-		    }
+	    	function write(string) {
+	    		$('#output').append(string + "<br />")
+	    	}
 	    </script>
 	</head>
 	<body>
