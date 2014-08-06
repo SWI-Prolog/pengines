@@ -12,13 +12,12 @@
         <script>
             var pengine = new Pengine({
                 ask: 'q(X)',
-                template: 'X',
                 onsuccess: handleSuccess
             });
             function handleSuccess() {
-                $('#out').html(this.data);
-                if ( !this.more ) {
-                   $('#next').prop("disabled",true);
+                $('#out').html(this.data[0].X);
+                if (!this.more) {
+                   $('#next').prop("disabled", true);
                 }
             }
         </script>
