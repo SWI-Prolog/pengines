@@ -5,8 +5,8 @@
         <script type="text/x-prolog">
     	   
             main :-
-                pengine_input('Please enter a term, stop with "stop"', X),
-                (   X == stop
+                pengine_input('Please enter a term.', X),
+                (   X == null
                 ->  true
                 ;   pengine_output(X),
                     main
@@ -17,7 +17,8 @@
 		   var pengine = new Pengine({
                 ask: 'main',
                 onprompt: handlePrompt,
-                onoutput: handleOutput
+                onoutput: handleOutput,
+                onerror: handleOutput
             });
             function handlePrompt() {
                 pengine.respond(prompt(this.data));
