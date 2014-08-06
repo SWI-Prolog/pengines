@@ -12,13 +12,13 @@
         <script>
             var pengine = new Pengine({
                 ask: 'q(X)',
-                template: 'X',
+                template: 'X',      // explicit template
                 chunk: 3,           // chunks of three answers
                 onsuccess: handleSuccess
             });
             function handleSuccess() {
                 $('#out').html(this.data);
-                if ( !this.more ) {
+                if (!this.more) {
                    $('#next').prop("disabled", true);
                 }
             }
