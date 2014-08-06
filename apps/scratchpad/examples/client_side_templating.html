@@ -68,12 +68,10 @@ Here, handlebars.js (http://handlebarsjs.com/) provides us with client-side temp
             var compiledTemplate = Handlebars.compile(template);
             
             pengine = new Pengine({
-                oncreate: handleCreate,
+                ask: 'table(Table)',
                 onsuccess: applyTemplate
             })
-            function handleCreate() {
-                pengine.ask('table(Table)');
-            }            
+                     
             function applyTemplate() {
                 var result = compiledTemplate(this.data[0].Table);
                 $('body').html(result)
