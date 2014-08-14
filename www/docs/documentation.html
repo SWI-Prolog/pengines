@@ -119,7 +119,7 @@ var pengine = new Pengine(<em>options</em>);</pre>
                             <dt><code>srcurl:<em>string</em></code></dt>
                             <dd>A URL resolving to a file containing Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>
                             <dt><code>format:<em>string</em></code></dt>
-                            <dd>Determines the format of event responses. Format is a string, either <code>prolog</code>, <code>json</code> (default), or <code>json-s</code>.</dd>                            
+                            <dd>Determines the format of event responses. Format is a string, either <code>json</code> (default), <code>json-s</code> or <code>json-html</code>. In addition, new formats can be added by defining <code>event_to_json/3</code>. See <code>library(pengines_io)</code>. </dd>          
                             <dt><code>oncreate:<em>function</em></code></dt>
                             <dd>JavaScript function to be called when a pengine has been created. The expression <code>this.id</code> in the scope of the function points to the id of the pengine.
                             <dt><code>onsuccess:<em>function</em></code></dt>
