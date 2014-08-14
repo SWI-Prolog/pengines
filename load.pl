@@ -20,14 +20,14 @@
 pengines:prepare_module(Module, swish, _Options) :-
 	pengines_io:pengine_bind_io_to_html(Module).
 
-
 :- pengine_application(genealogist).
-:- use_module(genealogist:'apps/genealogist/genealogist.pl').	
-	
-	
-%swish:(goal_expansion(In,Out) :-
-%	pengine_io_goal_expansion(In, Out)).
+:- use_module(genealogist:'apps/genealogist/genealogist.pl').
+
 % Libraries that are nice to have in SWISH, but cannot be loaded
 % because they use directives that are considered unsafe.  We load
 % them here, so they only need to be imported, which is just fine.
+
 :- use_module(library(clpfd), []).
+:- if(exists_source(library(clpb))).
+:- use_module(library(clpb), []).
+:- endif.
