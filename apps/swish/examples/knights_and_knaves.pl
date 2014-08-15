@@ -54,8 +54,8 @@ example_knights(5, [A,B,C]) :-
 
 /** Examples
 
-example_knights(1, Knights).
-example_knights(2, Knights).
+example_knights(1, [A,B]).
+example_knights(2, [A,B]).
 example_knights(5, Knights), labeling(Knights).
 example_knights(Example, Knights).
 
