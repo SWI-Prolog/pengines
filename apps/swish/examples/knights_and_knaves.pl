@@ -15,8 +15,8 @@
 % Notice that no search is required for most of these examples.
 
 
-% Example 1: You meet two inhabitants, A and B. A says: "At least
-%            one of us is a knave."
+% Example 1: You meet two inhabitants, A and B.
+%            A says: "At least one of us is a knave."
 
 example_knights(1, Ks) :-
         Ks = [A,B],
