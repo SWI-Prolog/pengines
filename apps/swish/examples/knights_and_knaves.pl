@@ -30,20 +30,20 @@ example_knights(2, Ks) :-
         sat(A=:=(~A + B)).
 
 
-% Example 3: A says: "All of us are knaves."
-%            B says: "Exactly one of us is a knight."
+% Example 3: A says: "I am a knave, but B isn't."
 
 example_knights(3, Ks) :-
-        Ks = [A,B,C],
-        sat(A=:=(~A* ~B* ~C)),
-        sat(B=:=card([1],Ks)).
-
-
-% Example 4: A says: "I am a knave, but B isn't."
-
-example_knights(4, Ks) :-
         Ks = [A,B],
         sat(A=:=(~A * B)).
+
+
+% Example 4: You meet 3 inhabitants. A says: "All of us are knaves."
+%            B says: "Exactly one of us is a knight."
+
+example_knights(4, Ks) :-
+        Ks = [A,B,C],
+        sat(A=:=(~A * ~B * ~C)),
+        sat(B=:=card([1],Ks)).
 
 
 % Example 5: A says: "B is a knave."
