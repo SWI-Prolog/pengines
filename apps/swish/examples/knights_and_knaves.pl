@@ -16,22 +16,22 @@
 
 
 % Example 1: You meet two inhabitants, A and B.
-%            A says: "At least one of us is a knave."
+%            A says: "Either I am a knave or B is a knight."
 
 example_knights(1, [A,B]) :-
-        sat(A=:=card([1,2],[~A,~B])).
-
-
-% Example 2: A says: "Either I am a knave or B is a knight."
-
-example_knights(2, [A,B]) :-
         sat(A=:=(~A + B)).
 
 
-% Example 3: A says: "I am a knave, but B isn't."
+% Example 2: A says: "I am a knave, but B isn't."
+
+example_knights(2, [A,B]) :-
+        sat(A=:=(~A * B)).
+
+
+% Example 3: A says: "At least one of us is a knave."
 
 example_knights(3, [A,B]) :-
-        sat(A=:=(~A * B)).
+        sat(A=:=card([1,2],[~A,~B])).
 
 
 % Example 4: You meet 3 inhabitants. A says: "All of us are knaves."
