@@ -25,6 +25,9 @@
 
 user:file_search_path(storage, Dir) :-
 	setting(storage_dir, Dir).
+user:file_search_path(storage, 'apps/swish/examples').
+user:file_search_path(storage, 'apps/scratchpad/examples').
+
 
 :- http_handler(root(storage), serve_files_in_directory(storage), [prefix]).
 :- http_handler(root(storage/store), store, []).
