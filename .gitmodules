@@ -1,0 +1,3 @@
+[submodule "apps/swish"]
+	path = apps/swish
+	url = https://github.com/SWI-Prolog/swish.git

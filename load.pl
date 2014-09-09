@@ -12,22 +12,8 @@
 :- use_module(lib/admin/server_statistics).
 :- use_module(lib/admin/change_passwd).
 
-:- multifile
-	pengines:prepare_module/3.
-
-:- pengine_application(swish).
-:- use_module(swish:library(pengines_io)).
-pengines:prepare_module(Module, swish, _Options) :-
-	pengines_io:pengine_bind_io_to_html(Module).
-
-:- pengine_application(genealogist).
-:- use_module(genealogist:'apps/genealogist/genealogist.pl').
-
-% Libraries that are nice to have in SWISH, but cannot be loaded
-% because they use directives that are considered unsafe.  We load
-% them here, so they only need to be imported, which is just fine.
-
-:- use_module(library(clpfd), []).
-:- if(exists_source(library(clpb))).
-:- use_module(library(clpb), []).
+:- if(exists_source(apps(swish/swish))).
+:- multifile http:location/3.
+http:location(swish, apps(swish), [priority(10)]).
+:- use_module(apps(swish/swish)).
 :- endif.
