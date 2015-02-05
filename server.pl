@@ -4,6 +4,7 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_path)).
+:- use_module(library(http/http_authenticate)).
 :- use_module(library(http/http_server_files)).
 
 /** <module> Pengines Web Server
