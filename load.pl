@@ -17,3 +17,9 @@
 http:location(swish, apps(swish), [priority(10)]).
 :- use_module(apps(swish/swish)).
 :- endif.
+
+% access at /apps/genealogist/index.html
+:- if(exists_source(apps(genealogist/app))).
+:- use_module(apps(genealogist/app)).
+:- endif.
+
