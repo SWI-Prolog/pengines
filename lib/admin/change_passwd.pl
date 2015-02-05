@@ -1,5 +1,6 @@
 :- module(change_passwd,
-	  [ change_passwd/3
+	  [ change_passwd/3,
+	    check_passwd/1
 	  ]).
 
 :- use_module(library(http/http_dispatch)).
@@ -37,4 +38,42 @@ update_passwd(File, User, Hash) :-
     ),
     http_write_passwd_file(File, NewData).
 update_passwd(File, User, Hash) :-
-    http_write_passwd_file(File, passwd(User, Hash, [])).
+    http_write_passwd_file(File, [passwd(User, Hash, [])]).
+
+%%	check_passwd(+File)
+%
+%	Test existence and sanity of the `passwd` file and comment
+%	how to make it sane.
+
+check_passwd(File) :-
+	exists_file(File),
+	http_read_passwd_file(File, Data),
+	Data = [passwd(_, _, _)|_], !.
+check_passwd(File) :-
+	print_message(warning, pengine(no_admin_passwd)),
+	nl(user_output),
+	ask('Username (default: "admin")? ', User, admin),
+	ask('Password (will be ECHOED)? ', Passwd, _),
+	change_passwd(File, User, Passwd).
+
+ask(Prompt, Answer, Default) :-
+	setup_call_cleanup(
+	    prompt(Old, Prompt),
+	    ( read_line_to_codes(user_input, Answer0),
+	      (   Answer0 == [], nonvar(Default)
+	      ->  Answer = Default
+	      ;   Answer = Answer0
+	      )
+	    ),
+	    prompt(_, Old)).
+
+:- multifile prolog:message/1.
+
+prolog:message(pengine(no_admin_passwd)) -->
+	[ 'There is no password for the admin interface of Pengines.', nl,
+	  'Please enter a username and password.  Please keep in mind', nl,
+	  'that', nl, nl,
+	  '  - The passwd is transferred over plain HTTP', nl,
+	  '  - The admin are not very sensitive wrt. system security', nl,
+	  '  - The passwd will be echoed when you enter it'
+	].
