@@ -54,7 +54,8 @@ check_passwd(File) :-
 	nl(user_output),
 	ask('Username (default: "admin")? ', User, admin),
 	ask('Password (will be ECHOED)? ', Passwd, _),
-	change_passwd(File, User, Passwd).
+	atom_codes(UserAtom, User),
+	change_passwd(File, UserAtom, Passwd).
 
 ask(Prompt, Answer, Default) :-
 	setup_call_cleanup(
