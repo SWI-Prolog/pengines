@@ -55,7 +55,7 @@ function update(op) {
         X = $("#X").val().toLowerCase() || '_',
         Y = $("#Y").val().toLowerCase() || '_',
         command = pred + '(' + X + ',' + Y + ')';
-    Pengine({
+    pengine = new Pengine({
         application: 'genealogist',
         ask: command,
         onsuccess: function() {
