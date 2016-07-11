@@ -42,5 +42,12 @@ Next, install [bower](http://bower.io/) for your platform, go to
 the directory `apps/swish` and run
 
     bower install
+    make src
 
 Finally, restart the pengines server.
+
+### Docker
+
+A [Docker](https://www.docker.com/) file is available from
+https://github.com/ninjarobot/pengines-dockerfile
+
