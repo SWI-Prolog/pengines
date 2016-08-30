@@ -63,4 +63,4 @@ update(Request) :-
 	setting(storage_dir, Dir),
     directory_file_path(Dir, File, RelPath),
     setup_call_cleanup(open(RelPath, write, S), write(S, Program), close(S)),
-    reply_json(json([ok= @true]), [width(0)]).
+    reply_json(json({ok:true}), [width(0)]).

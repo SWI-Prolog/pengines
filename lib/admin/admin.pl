@@ -90,12 +90,12 @@ set_settings(Request) :-
     ->  catch(set_setting(Module:Setting, Value), Error, true),
         (   var(Error)
         ->  setting_property(Module:Setting, default(Default)),
-            reply_json(json([name=Name, value=ValueAtom, default=Default]))
+            reply_json(json{name:Name, value:ValueAtom, default:Default})
         ;   message_to_string(Error, Msg),
-            reply_json(json([error= @true, msg=Msg, name=Name]))
+            reply_json(json{error:true, msg:Msg, name:Name})
         )
     ;   message_to_string(Error, Msg),
-        reply_json(json([error= @true, msg=Msg, name=Name]))
+        reply_json(json{error:true, msg:Msg, name:Name})
     ).
 
 
