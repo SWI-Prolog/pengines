@@ -1,4 +1,4 @@
-#!/home/pengines/bin/swipl
+#!/usr/bin/swipl
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Pengines  is  prepared  to  be  combined  with  the  SWI-Prolog  library
@@ -32,6 +32,7 @@ make this work:
 :- use_module(library(settings)).
 :- use_module(library(http/http_unix_daemon)).
 :- use_module(library(http/http_log)).
+:- use_module(library(http/http_dyn_workers)).
 
 :- set_setting_default(http:logfile, 'log/httpd.log').
 
@@ -45,6 +46,5 @@ memlimit :-
 
 :- initialization memlimit.
 :- initialization load_settings('pengines.conf').
-:- initialization http_daemon.
 
 :- [load].
