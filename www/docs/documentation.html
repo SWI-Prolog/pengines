@@ -61,10 +61,10 @@
                         </li>
                         <li class="active">
                             <a href="/docs/documentation.html">Docs</a>
-                        </li>                        
+                        </li>
                         <li>
                             <a href="/admin/statistics.html">Stats</a>
-                        </li>                        
+                        </li>
                         <li>
                             <a href="/admin/server">Admin</a>
                         </li>
@@ -88,7 +88,7 @@
                             <li><a href="#more-prolog-docs">More Prolog documentation</a></li>
                         </ul>
                     </div>
-                </div>  
+                </div>
                 <div class="col-md-9">
 
                     <!-- API overview
@@ -111,17 +111,17 @@ var pengine = new Pengine(<em>options</em>);</pre>
                             <dt><code>template:<em>string</em></code></dt>
                             <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of this option is the variable bindings of the query passed in the ask option (a list of Name=Var pairs). Variable names in the query starting with an underscore character will however not appear in the list.</dd>
                             <dt><code>chunk:<em>integer</em></code></dt>
-                            <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd> 
+                            <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd>
                             <dt><code>destroy:<em>boolean</em></code></dt>
                             <dd>Determines if the pengine is to destroy itself after having run a query to completion. Defaults to <code>true</code>.</dd>
-                            <dt><code>srctext:<em>string</em></code></dt>
-                            <dd>Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>                            
-                            <dt><code>srcurl:<em>string</em></code></dt>
+                            <dt><code>src_text:<em>string</em></code></dt>
+                            <dd>Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>
+                            <dt><code>src_url:<em>string</em></code></dt>
                             <dd>A URL resolving to a file containing Prolog source code to be injected in the pengine before attempting to solve any queries.</dd>
                             <dt><code>format:<em>string</em></code></dt>
-                            <dd>Determines the format of event responses. Format is a string, either <code>json</code> (default), <code>json-s</code> or <code>json-html</code>. In addition, new formats can be added by defining <code>event_to_json/3</code>. See <code>library(pengines_io)</code>. </dd>          
+                            <dd>Determines the format of event responses. Format is a string, either <code>json</code> (default), <code>json-s</code> or <code>json-html</code>. In addition, new formats can be added by defining <code>event_to_json/3</code>. See <code>library(pengines_io)</code>. </dd>
                             <dt><code>oncreate:<em>function</em></code></dt>
-                            <dd>JavaScript function to be called when a pengine has been created. The expression <code>this.id</code> in the scope of the function points to the id of the pengine.
+                            <dd>JavaScript function to be called when a pengine has been created. The expression <code>this.id</code> in the scope of the function points to the id of the pengine.</dd>
                             <dt><code>onsuccess:<em>function</em></code></dt>
                             <dd>Called when the pengine responds with a successful answer to a query. In the scope of the function the expression <code>this.data</code> points to a <em>list</em> of objects each representing a solution to the query, <code>this.more</code> evaluates to a boolean indicating whether more solutions may exist, and<code>this.id</code> points to the id of the pengine returning the answer.</dd>
                             <dt><code>onfailure:<em>function</em></code></dt>
@@ -149,9 +149,9 @@ var pengine = new Pengine(<em>options</em>);</pre>
                                 <dt><code>template: <em>string</em></code></dt>
                                 <dd>A Prolog variable (or a term containing Prolog variables) shared with the query. Meaningful only if the ask option is specified. By default the value of this option is the variable bindings of the query passed in the ask option (a list of Name=Var pairs). Variable names in the query starting with an underscore character will however not appear in the list.</dd>
                                 <dt><code>chunk: <em>integer</em></code></dt>
-                                <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd>                                
+                                <dd>The maximum number of solutions to retrieve in one chunk. 1 means no chunking (default).</dd>
                             </dl>
-                            </dd>    
+                            </dd>
                             <dt><code>pengine.next()</code></dt>
                             <dd>Triggers a search for the next solution.</dd>
                             <dt><code>pengine.stop()</code></dt>
@@ -165,7 +165,7 @@ var pengine = new Pengine(<em>options</em>);</pre>
                         </dl>
 
                     </div>
-                    
+
                     <!-- API overview
                         ================================================== -->
                     <div class="bs-docs-section">
@@ -176,13 +176,13 @@ var pengine = new Pengine(<em>options</em>);</pre>
                             <a href="http://www.swi-prolog.org/pldoc/man?section=pengine-libs">Prolog API</a>
                         </p>
                     </div>
-        
+
                     <!-- API overview
                         ================================================== -->
                     <div class="bs-docs-section">
                         <div class="page-header">
                             <h1 id="more-prolog-docs">More Prolog documentation</h1>
-                        </div>                    
+                        </div>
                         <ul>
                             <li><a href="http://www.swi-prolog.org/pldoc/doc_for?object=manual" target="_newtab">SWI-Prolog documentation</a></li>
                         </ul>
@@ -191,7 +191,7 @@ var pengine = new Pengine(<em>options</em>);</pre>
         </div>
         <br />
         <br />
-        
+
         <!-- Footer
             ================================================== -->
         <footer class="footer">
